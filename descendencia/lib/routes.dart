@@ -3,4 +3,5 @@ enum MyRoutes {
   // page del proyecto
   loginroute,
   Inicioroute,
+  register,
 }
