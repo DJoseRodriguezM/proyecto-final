@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "621231428039",
+    "project_id": "livestock-control-lp24",
+    "storage_bucket": "livestock-control-lp24.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621231428039:android:7f3e5e32a4df4e4205c9e2",
+        "android_client_info": {
+          "package_name": "hn.edu.unah.descendencia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_Ci1ZXp6PRPJT2pvNs3cGooJqjUoJIPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
