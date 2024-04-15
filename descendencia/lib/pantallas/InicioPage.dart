@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-
+// componentes de la pantalla de inicio
+import 'package:descendencia/pantallas/components/inicio_page.dart';
+import 'package:descendencia/pantallas/components/produccion_page.dart';
+import 'package:descendencia/pantallas/components/ajustes_page.dart';
+import 'package:flutter/widgets.dart';
 class InicioPage extends StatefulWidget {
   InicioPage({Key? key, this.currentIndex = 0}) : super(key: key);
 
@@ -14,9 +18,6 @@ class _InicioPageState extends State<InicioPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Inicio'),
-      ),
       body: PageView(
           controller: pageController,
           // se bloquea el scroll
@@ -26,38 +27,13 @@ class _InicioPageState extends State<InicioPage> {
             setState(() {});
           },
           children: const [
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Card(
-                elevation: 10,
-                child: Center(
-                  child: Text(
-                    'joseph.alcerro@unah.hn',
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Card(
-                elevation: 10,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Melvin Majano",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      Text("Joseph Alcerro", style: TextStyle(fontSize: 18)),
-                    ],
-                  ),
-                ),
-              ),
-            )
+            // Componentes de la pantalla de inicio
+            InicioPageComp(),
+            ProduccionPage(),
+            AjustesPage()
           ]),
       bottomNavigationBar: BottomNavigationBar(
+        
         currentIndex: widget.currentIndex,
         onTap: (index) {
           widget.currentIndex = index;
@@ -68,17 +44,26 @@ class _InicioPageState extends State<InicioPage> {
             duration: const Duration(milliseconds: 300),
           );
           setState(() {});
+          
         },
-        items: const [
+        items: [
+          
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
+            icon: Image.asset('assets/hacienda.png', width: 35, height: 35),
+            label: 'Hacienda',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.info),
-            label: 'Creditos',
+            icon: Image.asset('assets/produccion.png', width: 35, height: 35),
+            label: 'Producción',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset('assets/ajuste.png', width: 35, height: 35),
+            label: 'Ajustes',
           ),
         ],
+        // color de los iconos de la barra de navegación
+        selectedItemColor: const Color.fromARGB(255, 0, 55, 16),
+        backgroundColor: const Color.fromARGB(185, 0, 93, 20)
       ),
     );
   }
