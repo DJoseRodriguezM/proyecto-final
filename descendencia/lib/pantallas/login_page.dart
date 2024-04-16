@@ -18,30 +18,35 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-        backgroundColor: const Color.fromARGB(255, 0, 216, 137),
-        title: const Text('Login'),
-      ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(0.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(
-                height: 200,
-                width: 200,
-                child: Image.asset('assets/logo.jpg'),
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/barra.png'),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
-              const Padding(padding: EdgeInsets.all(80)),
+              const Padding(padding: EdgeInsets.all(80.0)),
               InputItem(
                   controller: emailController,
                   labelText: 'Email',
                   hintText: 'email',
                   icon: const Icon(
                     Icons.email,
-                    color: Color.fromARGB(255, 156, 255, 137),
+                    color: Color.fromARGB(255, 42, 157, 0),
                   )),
               const SizedBox(height: 20.0),
               InputItem(
@@ -51,86 +56,69 @@ class LoginPageState extends State<LoginPage> {
                 obscureText: obscureText,
                 icon: const Icon(
                   Icons.lock,
-                  color: Color.fromARGB(255, 156, 255, 137),
+                  color: Color.fromARGB(255, 42, 157, 0),
                 ),
                 suffixIcon: IconButton(
                   icon: Icon(
+                      color: Color.fromARGB(255, 42, 157, 0),
                       obscureText ? Icons.visibility : Icons.visibility_off),
                   onPressed: () {
-                    // Cambia el estado de la contraseña
                     setState(() {
                       obscureText = !obscureText;
                     });
                   },
                 ),
               ),
-              const SizedBox(height: 20.0),
-              Center(
-                child: Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        if (emailController.text == 'joseph.alcerro@unah.hn' &&
-                            passwordController.text == '20222000391') {
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (context) => InicioPage()));
-                          return;
-                        } else {
-                          // Si las credenciales son incorrectas, muestra un mensaje de error
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Credenciales incorrectas'),
-                              backgroundColor: Color.fromARGB(255, 156, 255, 137),
-                            ),
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
-                        backgroundColor: const Color.fromARGB(255, 0, 136, 7),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
+              const SizedBox(height: 80.0),
+              ElevatedButton(
+                onPressed: () {
+                  if (emailController.text == 'joseph.alcerro@unah.hn' &&
+                      passwordController.text == '20222000391') {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => InicioPage()));
+                    return;
+                  } else {
+                    // Si las credenciales son incorrectas, muestra un mensaje de error
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Credenciales incorrectas'),
+                        backgroundColor: Color.fromARGB(255, 0, 91, 26),
                       ),
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Color.fromARGB(
-                                255, 255, 255, 255)), // Tamaño del texto
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
-                        backgroundColor: const Color.fromARGB(255, 0, 136, 7),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                      ),
-                      child: const Text(
-                        'Register',
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Color.fromARGB(
-                                255, 255, 255, 255)), // Tamaño del texto
-                      ),
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, MyRoutes.register.name);
-                      },
-                    ),
-                  ],
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+                  backgroundColor: const Color.fromARGB(255, 0, 136, 7),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                ),
+                child: const Text(
+                  'Login',
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Color.fromARGB(
+                          255, 255, 255, 255)), // Tamaño del texto
                 ),
               ),
               const SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, MyRoutes.register.name);
+                },
+                style: ElevatedButton.styleFrom(),
+                child: const Text(
+                  'Registrarse',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 0, 136, 7)), // Color del texto
+                ),
+              ),
             ],
           ),
         ),
       ),
-      drawerScrimColor: const Color.fromARGB(255, 156, 255, 137),
     );
   }
 }
