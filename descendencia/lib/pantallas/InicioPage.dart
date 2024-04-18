@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:descendencia/pantallas/components/inicio_page.dart';
 import 'package:descendencia/pantallas/components/produccion_page.dart';
 import 'package:descendencia/pantallas/components/ajustes_page.dart';
+import 'package:descendencia/pantallas/components/tratamientos_page.dart';
 import 'package:flutter/widgets.dart';
 class InicioPage extends StatefulWidget {
   InicioPage({Key? key, this.currentIndex = 0}) : super(key: key);
@@ -20,8 +21,6 @@ class _InicioPageState extends State<InicioPage> {
     return Scaffold(
       body: PageView(
           controller: pageController,
-          // se bloquea el scroll
-          physics: const NeverScrollableScrollPhysics(),
           onPageChanged: (value) {
             widget.currentIndex = value;
             setState(() {});
@@ -30,7 +29,9 @@ class _InicioPageState extends State<InicioPage> {
             // Componentes de la pantalla de inicio
             InicioPageComp(),
             ProduccionPage(),
-            AjustesPage()
+            TratamientosPage(),
+            AjustesPage(),
+
           ]),
       bottomNavigationBar: BottomNavigationBar(
         
@@ -49,21 +50,29 @@ class _InicioPageState extends State<InicioPage> {
         items: [
           
           BottomNavigationBarItem(
+            backgroundColor: const Color.fromARGB(255, 5, 93, 24),
             icon: Image.asset('assets/hacienda.png', width: 35, height: 35),
             label: 'Hacienda',
           ),
           BottomNavigationBarItem(
+            backgroundColor: const Color.fromARGB(255, 5, 93, 24),
             icon: Image.asset('assets/produccion.png', width: 35, height: 35),
             label: 'Producción',
           ),
           BottomNavigationBarItem(
+            backgroundColor: const Color.fromARGB(255, 5, 93, 24),
+            icon: Image.asset('assets/tratamiento.png', width: 35, height: 35),
+            label: 'Tratamientos',
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: const Color.fromARGB(255, 5, 93, 24),
             icon: Image.asset('assets/ajuste.png', width: 35, height: 35),
             label: 'Ajustes',
           ),
         ],
         // color de los iconos de la barra de navegación
-        selectedItemColor: const Color.fromARGB(255, 0, 55, 16),
-        backgroundColor: const Color.fromARGB(185, 0, 93, 20)
+        selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
+        unselectedItemColor: const Color.fromARGB(255, 0, 0, 0),
       ),
     );
   }

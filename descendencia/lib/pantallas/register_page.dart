@@ -24,7 +24,7 @@ class RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-        backgroundColor: const Color.fromARGB(255, 0, 216, 137),
+        backgroundColor: const Color.fromARGB(255, 5, 93, 24),
         title: const Text('Register'),
     ),
     body: Padding(
@@ -34,7 +34,7 @@ class RegisterPageState extends State<RegisterPage> {
           children: [
             const SizedBox(height: 20),
             Image.asset(
-              'assets/logo.jpg',
+              'assets/logo1.png',
               height: 100,
               width: 100,
             ),
@@ -58,7 +58,7 @@ class RegisterPageState extends State<RegisterPage> {
                       labelText: 'Nombre',
                       icon: Icon(
                         Icons.person,
-                        color: Color.fromARGB(255, 156, 255, 137),
+                        color: Color.fromARGB(255, 5, 93, 24),
                         ),
                       border: OutlineInputBorder(),
                     ),
@@ -76,7 +76,7 @@ class RegisterPageState extends State<RegisterPage> {
                       labelText: 'Email',
                       icon: Icon(
                         Icons.email,
-                        color: Color.fromARGB(255, 156, 255, 137),
+                        color: Color.fromARGB(255, 5, 93, 24),
                         ),
                       border: OutlineInputBorder(),
                     ),
@@ -94,7 +94,7 @@ class RegisterPageState extends State<RegisterPage> {
                       labelText: 'Teléfono',
                       icon: Icon(
                         Icons.phone,
-                        color: Color.fromARGB(255, 156, 255, 137),
+                        color: Color.fromARGB(255, 5, 93, 24),
                         ),
                       border: OutlineInputBorder(),
                     ),
@@ -113,7 +113,7 @@ class RegisterPageState extends State<RegisterPage> {
                       labelText: 'Contraseña',
                       icon: const Icon(
                         Icons.lock,
-                        color: Color.fromARGB(255, 156, 255, 137),),
+                        color: Color.fromARGB(255, 5, 93, 24),),
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
                       icon: Icon(
@@ -141,7 +141,7 @@ class RegisterPageState extends State<RegisterPage> {
                       labelText: 'Confirmar contraseña',
                       icon: const Icon(
                         Icons.lock,
-                        color: Color.fromARGB(255, 156, 255, 137),),
+                        color: Color.fromARGB(255, 5, 93, 24),),
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
                       icon: Icon(
@@ -160,7 +160,7 @@ class RegisterPageState extends State<RegisterPage> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-                      backgroundColor: const Color.fromARGB(255, 0, 136, 7),
+                      backgroundColor: Color.fromARGB(255, 5, 93, 24),
                       minimumSize: const Size(double.infinity, 50), 
                       shape: RoundedRectangleBorder( 
                         borderRadius: BorderRadius.circular(10),
@@ -193,7 +193,7 @@ class RegisterPageState extends State<RegisterPage> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('La contraseña no coincide con la confirmación de la misma'),
-                              backgroundColor: Color.fromARGB(255, 156, 255, 137),
+                              backgroundColor: Color.fromARGB(255, 5, 93, 24),
                               )
                           );
                           return;
