@@ -4,7 +4,6 @@ import 'package:descendencia/pantallas/components/inicio_page.dart';
 import 'package:descendencia/pantallas/components/produccion_page.dart';
 import 'package:descendencia/pantallas/components/ajustes_page.dart';
 import 'package:descendencia/pantallas/components/tratamientos_page.dart';
-import 'package:flutter/widgets.dart';
 class InicioPage extends StatefulWidget {
   InicioPage({Key? key, this.currentIndex = 0}) : super(key: key);
 

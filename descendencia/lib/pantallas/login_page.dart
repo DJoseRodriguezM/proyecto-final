@@ -1,10 +1,48 @@
 import 'package:descendencia/pantallas/InicioPage.dart';
 import 'package:descendencia/routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:descendencia/Widgets/InputItem.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+Future<UserCredential> signInWithGoogle() async {
+  // Trigger the authentication flow
+  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+  // Obtain the auth details from the request
+  final GoogleSignInAuthentication? googleAuth =
+      await googleUser?.authentication;
+
+  // Create a new credential
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken,
+  );
+
+  // Once signed in, return the UserCredential
+  return await FirebaseAuth.instance.signInWithCredential(credential);
+}
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({required key}) : super(key: key);
+  const LoginPage({key}) : super(key: key);
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
 
   @override
   LoginPageState createState() => LoginPageState();
@@ -30,7 +68,7 @@ class LoginPageState extends State<LoginPage> {
                   children: <Widget>[
                     Container(
                       height: 200,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage('assets/barra.png'),
                           fit: BoxFit.fill,
@@ -61,7 +99,7 @@ class LoginPageState extends State<LoginPage> {
                 ),
                 suffixIcon: IconButton(
                   icon: Icon(
-                      color: Color.fromARGB(255, 5, 93, 24),
+                      color: const Color.fromARGB(255, 5, 93, 24),
                       obscureText ? Icons.visibility : Icons.visibility_off),
                   onPressed: () {
                     setState(() {
@@ -124,6 +162,28 @@ class LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                       color: Color.fromARGB(255, 5, 93, 24), // Color del texto
                   ),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  signInWithGoogle()
+                  .then((UserCredential user) => {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return InicioPage();
+                            },
+                          ),
+                        ),
+                      })
+                  .catchError(
+                    () {
+                      print('Error');
+                    },
+                  );
+                },
+                child: const Text(
+                  'Usar Google'
                 ),
               ),
             ],

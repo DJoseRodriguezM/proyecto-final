@@ -1,4 +1,3 @@
-import 'package:descendencia/pantallas/login_page.dart';
 import 'package:descendencia/routes.dart';
 import 'package:flutter/material.dart';
 
@@ -160,7 +159,7 @@ class RegisterPageState extends State<RegisterPage> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-                      backgroundColor: Color.fromARGB(255, 5, 93, 24),
+                      backgroundColor: const Color.fromARGB(255, 5, 93, 24),
                       minimumSize: const Size(double.infinity, 50), 
                       shape: RoundedRectangleBorder( 
                         borderRadius: BorderRadius.circular(10),
@@ -207,6 +206,7 @@ class RegisterPageState extends State<RegisterPage> {
             ),
           ],
         ),
+        
       ),
     ),
     );
