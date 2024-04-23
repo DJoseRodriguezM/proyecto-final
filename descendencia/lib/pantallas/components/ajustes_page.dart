@@ -9,6 +9,7 @@ class AjustesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ajustes'),
+        foregroundColor: Colors.white,
         backgroundColor: const Color.fromARGB(255, 5, 93, 24),
         actions: [
           IconButton(

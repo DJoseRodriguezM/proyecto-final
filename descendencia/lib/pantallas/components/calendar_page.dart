@@ -1,5 +1,6 @@
-// import 'package:componentes/home_page.dart';
+
 import 'package:flutter/material.dart';
+import 'package:horizontal_calendar/horizontal_calendar.dart';
 
 class CalendarPage extends StatelessWidget {
   const CalendarPage({super.key});
@@ -8,14 +9,48 @@ class CalendarPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Actividades'),
+        title: Text('Actividades'),
+        actions: <Widget>[
+          PopupMenuButton<Locale>(
+            // onSelected: widget.onLocaleChanged,
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<Locale>>[
+              const PopupMenuItem<Locale>(
+                value: Locale('en', ''),
+                child: Text('English'),
+              ),
+              const PopupMenuItem<Locale>(
+                value: Locale('fr', ''),
+                child: Text('French'),
+              ),
+              const PopupMenuItem<Locale>(
+                value: Locale('es', ''),
+                child: Text('Spanish'),
+              ),
+              const PopupMenuItem<Locale>(
+                value: Locale('vi', ''),
+                child: Text('Vietnamese'),
+              ),
+              const PopupMenuItem<Locale>(
+                value: Locale('zh', ''),
+                child: Text('Chinese'),
+              ),
+            ],
+          ),
+        ],
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            
-          ],
-        ),
+      body: HorizontalCalendar(
+        date: DateTime.now(),
+        initialDate: DateTime.now(),
+        textColor: Colors.black,
+        backgroundColor: Colors.white,
+        selectedColor: Colors.orange,
+        showMonth: true,
+        locale: Localizations.localeOf(context),
+        onDateSelected: (date) {
+          // if (kDebugMode) {
+          //   print(date.toString());
+          // }
+        },
       ),
     );
   }

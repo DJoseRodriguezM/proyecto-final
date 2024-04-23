@@ -9,6 +9,7 @@ class TratamientosPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Tratamientos'),
         backgroundColor: const Color.fromARGB(255, 5, 93, 24),
+        foregroundColor: Colors.white,
       ),
       body: ListView.builder(
         itemCount: 10,

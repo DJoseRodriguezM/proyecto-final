@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:descendencia/routes.dart';
+import 'package:horizontal_calendar/horizontal_calendar.dart';
 
 class InicioPageComp extends StatelessWidget {
   const InicioPageComp({Key? key});
@@ -18,6 +19,21 @@ class InicioPageComp extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              HorizontalCalendar(
+                date: DateTime.now(),
+                initialDate: DateTime.now(),
+                textColor: Colors.black,
+                backgroundColor: Colors.white,
+                selectedColor: Colors.orange,
+                showMonth: true,
+                locale: Localizations.localeOf(context),
+                onDateSelected: (date) {
+                  // if (kDebugMode) {
+                  //   print(date.toString());
+                  // }
+                },
+              ),
+              const SizedBox(height: 50.0),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pushNamed(context, MyRoutes.calendar.name);
