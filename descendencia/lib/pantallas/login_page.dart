@@ -3,6 +3,7 @@ import 'package:descendencia/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:descendencia/Widgets/InputItem.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 Future<UserCredential> signInWithGoogle() async {
@@ -24,31 +25,13 @@ Future<UserCredential> signInWithGoogle() async {
 }
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({key}) : super(key: key);
-
-  Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
-  }
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
-  LoginPageState createState() => LoginPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool obscureText = true;
@@ -57,137 +40,149 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.all(0),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      height: 200,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/barra.png'),
-                          fit: BoxFit.fill,
-                        ),
+        child: Column(
+          children: <Widget>[
+// * * * * * * * * * * * * *  * * * * * *  * * * * * * *
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/barra.png'),
+                  fit: BoxFit.fill,
+                ),
+              ),
+              height: 200,
+            ),
+// * * * * * * * * * * * * *  * * * * * *  * * * * * * *
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  InputItem(
+                    controller: emailController,
+                    labelText: 'Email',
+                    hintText: 'email',
+                    icon: const Icon(
+                      Icons.email,
+                      color: Color.fromARGB(255, 5, 93, 24),
+                    ),
+                  ),
+                  const SizedBox(height: 20.0),
+                  InputItem(
+                    controller: passwordController,
+                    labelText: 'Password',
+                    hintText: 'password',
+                    obscureText: obscureText,
+                    icon: const Icon(
+                      Icons.lock,
+                      color: Color.fromARGB(255, 5, 93, 24),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        color: const Color.fromARGB(255, 5, 93, 24),
+                        obscureText ? Icons.visibility : Icons.visibility_off,
                       ),
-                    )
-                  ],
-                ),
-              ),
-              const Padding(padding: EdgeInsets.all(50.0)),
-              InputItem(
-                  controller: emailController,
-                  labelText: 'Email',
-                  hintText: 'email',
-                  icon: const Icon(
-                    Icons.email,
-                    color: Color.fromARGB(255, 5, 93, 24),
-                  )),
-              const SizedBox(height: 20.0),
-              InputItem(
-                controller: passwordController,
-                labelText: 'Password',
-                hintText: 'password',
-                obscureText: obscureText,
-                icon: const Icon(
-                  Icons.lock,
-                  color: Color.fromARGB(255, 5, 93, 24),
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                      color: const Color.fromARGB(255, 5, 93, 24),
-                      obscureText ? Icons.visibility : Icons.visibility_off),
-                  onPressed: () {
-                    setState(() {
-                      obscureText = !obscureText;
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 80.0),
-              ElevatedButton(
-                onPressed: () {
-                  if ((emailController.text == 'joseph.alcerro@unah.hn' &&
-                      passwordController.text == '20222000391') || (emailController.text == 'dj.rodriguez@unah.hn' &&
-                      passwordController.text == '20222000953')) {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => InicioPage()));
-                    return;
-                  } else {
-                    // Si las credenciales son incorrectas, muestra un mensaje de error
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Credenciales incorrectas'),
-                        backgroundColor: Color.fromARGB(255, 5, 93, 24),
-                      ),
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                      onPressed: () {
+                        setState(() {
+                          obscureText = !obscureText;
+                        });
+                      },
+                    ),
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
-                  backgroundColor: const Color.fromARGB(255, 5, 93, 24),
-                ),
-                child: const Text(
-                  'Login',
-                  style: TextStyle(
-                    
-                      fontSize: 18,
-                      color: Color.fromARGB(
-                          255, 255, 255, 255)), // Tamaño del texto
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, MyRoutes.register.name);
-                },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text(
-                  'Registrarse',
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 5, 93, 24), // Color del texto
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  signInWithGoogle()
-                  .then((UserCredential user) => {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return InicioPage();
-                            },
+                  const SizedBox(height: 80.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      if ((emailController.text == 'joseph.alcerro@unah.hn' &&
+                              passwordController.text == '20222000391') ||
+                          (emailController.text == 'dj.rodriguez@unah.hn' &&
+                              passwordController.text == '20222000953')) {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => InicioPage()));
+                        return;
+                      } else {
+                        // Si las credenciales son incorrectas, muestra un mensaje de error
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Credenciales incorrectas'),
+                            backgroundColor: Color.fromARGB(255, 5, 93, 24),
                           ),
-                        ),
-                      })
-                  .catchError(
-                    () {
-                      print('Error');
+                        );
+                      }
                     },
-                  );
-                },
-                child: const Text(
-                  'Usar Google'
-                ),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 15,
+                        horizontal: 50,
+                      ),
+                      backgroundColor: const Color.fromARGB(255, 5, 93, 24),
+                    ),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ),
+                  ),
+                  // *********************************************************************
+                  const SizedBox(height: 40.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, MyRoutes.register.name);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 40),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                    ),
+                    child: const Text(
+                      'Registrarse',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 5, 93, 24),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      signInWithGoogle()
+                          .then((UserCredential user) => {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return InicioPage();
+                                    },
+                                  ),
+                                ),
+                              })
+                          .catchError(
+                        () {
+                          print('Error');
+                        },
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 40),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        )),
+                    child: const Text(
+                      'Usar Google',
+                      style: TextStyle(color: Color.fromARGB(255, 5, 93, 24)),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
