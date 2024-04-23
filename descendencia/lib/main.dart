@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:descendencia/routes.dart';
 import 'package:descendencia/router.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -24,18 +24,18 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Material App',
         home: StreamBuilder(
-                stream: FirebaseAuth.instance.authStateChanges(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasError) {
-                    print('Error en la autenticación: ${snapshot.error}');
-                    return const LoginPage();
-                  }
-                  if (snapshot.hasData) {
-                    return InicioPage();
-                  }
-                  return const LoginPage();
-                },
-              ),
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.hasError) {
+              print('Error en la autenticación: ${snapshot.error}');
+              return const LoginPage();
+            }
+            if (snapshot.hasData) {
+              return InicioPage();
+            }
+            return const LoginPage();
+          },
+        ),
         //initialRoute: MyRoutes.loginroute.name,
         routes: routes,
         onGenerateRoute: (settings) {

@@ -4,6 +4,7 @@ import 'package:descendencia/pantallas/components/inicio_page.dart';
 import 'package:descendencia/pantallas/components/produccion_page.dart';
 import 'package:descendencia/pantallas/components/ajustes_page.dart';
 import 'package:descendencia/pantallas/components/tratamientos_page.dart';
+
 class InicioPage extends StatefulWidget {
   InicioPage({Key? key, this.currentIndex = 0}) : super(key: key);
 
@@ -25,15 +26,12 @@ class _InicioPageState extends State<InicioPage> {
             setState(() {});
           },
           children: const [
-            // Componentes de la pantalla de inicio
             InicioPageComp(),
             ProduccionPage(),
             TratamientosPage(),
             AjustesPage(),
-
           ]),
       bottomNavigationBar: BottomNavigationBar(
-        
         currentIndex: widget.currentIndex,
         onTap: (index) {
           widget.currentIndex = index;
@@ -44,10 +42,8 @@ class _InicioPageState extends State<InicioPage> {
             duration: const Duration(milliseconds: 300),
           );
           setState(() {});
-          
         },
         items: [
-          
           BottomNavigationBarItem(
             backgroundColor: const Color.fromARGB(255, 5, 93, 24),
             icon: Image.asset('assets/hacienda.png', width: 35, height: 35),
@@ -69,7 +65,6 @@ class _InicioPageState extends State<InicioPage> {
             label: 'Ajustes',
           ),
         ],
-        // color de los iconos de la barra de navegación
         selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
         unselectedItemColor: const Color.fromARGB(255, 0, 0, 0),
       ),
