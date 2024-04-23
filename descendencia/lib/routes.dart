@@ -4,4 +4,5 @@ enum MyRoutes {
   loginroute,
   Inicioroute,
   register,
+  animales,
 }
