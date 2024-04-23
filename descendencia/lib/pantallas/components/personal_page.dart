@@ -1,14 +1,14 @@
 // import 'package:componentes/home_page.dart';
 import 'package:flutter/material.dart';
 
-class AnimalPage extends StatelessWidget {
-  const AnimalPage({super.key});
+class PersonalPage  extends StatelessWidget {
+  const PersonalPage ({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bovinos'),
+        title: const Text('Personal'),
       ),
       body: SafeArea(
         child: Column(

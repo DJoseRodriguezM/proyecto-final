@@ -5,4 +5,8 @@ enum MyRoutes {
   Inicioroute,
   register,
   animales,
+  personal,
+  almacenamiento,
+  general,
+  calendar,
 }

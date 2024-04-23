@@ -1,7 +1,5 @@
-import 'package:descendencia/pantallas/components/animal_page.dart';
 import 'package:descendencia/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:descendencia/router.dart';
 
 class ProduccionPage extends StatelessWidget {
   const ProduccionPage({ super.key });
@@ -47,7 +45,9 @@ class ProduccionPage extends StatelessWidget {
               ),
               const SizedBox(height: 20.0),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, MyRoutes.personal.name);
+                },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
                   minimumSize: const Size(double.infinity, 50),
@@ -73,7 +73,9 @@ class ProduccionPage extends StatelessWidget {
               ),
               const SizedBox(height: 20.0),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, MyRoutes.almacenamiento.name);
+                },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
                   minimumSize: const Size(double.infinity, 50),
