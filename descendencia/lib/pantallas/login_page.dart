@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:descendencia/pantallas/InicioPage.dart';
 import 'package:descendencia/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -44,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
 // * * * * * * * * * * * * *  * * * * * *  * * * * * * *
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/barra.png'),
                   fit: BoxFit.fill,
@@ -91,16 +92,33 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 80.0),
                   ElevatedButton(
-                    onPressed: () {
-                      if ((emailController.text == 'joseph.alcerro@unah.hn' &&
-                              passwordController.text == '20222000391') ||
-                          (emailController.text == 'dj.rodriguez@unah.hn' &&
-                              passwordController.text == '20222000953')) {
-                        Navigator.pushReplacement(
+                    onPressed: () async {
+                      final String email = emailController.text;
+                      final String password = passwordController.text;
+
+                      final resultados = await FirebaseFirestore.instance
+                          .collection('usuarios')
+                          .where('email', isEqualTo: email)
+                          .where('contraseña', isEqualTo: password)
+                          .get();
+
+                      final List<DocumentSnapshot> documentos = resultados.docs;  
+                      if (documentos.length == 1) {
+                        // Comprueba si la contraseña es correcta
+                        if (documentos[0]['contraseña'] == password) {
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => InicioPage()));
-                        return;
+                        } else {
+                        // Si las credenciales son incorrectas, muestra un mensaje de error
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Credenciales incorrectas'),
+                            backgroundColor: Color.fromARGB(255, 5, 93, 24),
+                          ),
+                        );
+                      }
                       } else {
                         // Si las credenciales son incorrectas, muestra un mensaje de error
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -164,8 +182,8 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               })
                           .catchError(
-                        () {
-                          print('Error');
+                        (error) {
+                          print('Error: $error');
                         },
                       );
                     },

@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:descendencia/routes.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({required key}) : super(key: key);
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
   RegisterPageState createState() => RegisterPageState();
@@ -15,11 +16,23 @@ class RegisterPageState extends State<RegisterPage> {
   final passwordController = TextEditingController();
   final passwordconfirmController = TextEditingController();
 
+  final instance = FirebaseFirestore.instance;
   bool isPasswordVisible = false;
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as String?;
+
+    if (args != null) {
+      instance.collection('usuarios').doc(args).get().then((value) {
+        nameController.text = value['nombre'];
+        emailController.text = value['correo'];
+        phoneController.text = value['telefono'].toString();
+        passwordController.text = value['contraseña'];
+        passwordconfirmController.text = value['confcontra'];
+      });
+    }
     return Scaffold(
       appBar: AppBar(
         foregroundColor: const Color.fromARGB(255, 255, 255, 255),
@@ -48,8 +61,7 @@ class RegisterPageState extends State<RegisterPage> {
                       validator: (value) {
                         if (value!.isEmpty) return 'El nombre es obligatorio';
 
-                        if (value.length < 3)
-                          return 'El nombre debe tener al menos 3 caracteres';
+                        if (value.length < 3) return 'El nombre debe tener al menos 3 caracteres';
 
                         return null;
                       },
@@ -69,6 +81,12 @@ class RegisterPageState extends State<RegisterPage> {
                       validator: (value) {
                         if (value!.isEmpty) return 'El correo es obligatorio';
 
+                        Pattern pattern =
+                            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                        RegExp regex = RegExp(pattern.toString());
+
+                        if (!regex.hasMatch(value)) return 'Ejemplos de correos válidos: ejemplo@dominio.com o nombre.apellido@empresa.org';
+
                         return null;
                       },
                       keyboardType: TextInputType.emailAddress,
@@ -87,6 +105,11 @@ class RegisterPageState extends State<RegisterPage> {
                       validator: (value) {
                         if (value!.isEmpty) return 'El teléfono es obligatorio';
 
+                        Pattern pattern = r'^(\+?\d{1,4}?)?((\(\d{1,3}\))|\d{1,3})[- .]?\d{1,4}[- .]?\d{1,9}$';
+                        RegExp regex = RegExp(pattern.toString());
+
+                        if (!regex.hasMatch(value)) return 'Introduce un número de teléfono válido';
+
                         return null;
                       },
                       keyboardType: TextInputType.phone,
@@ -104,8 +127,12 @@ class RegisterPageState extends State<RegisterPage> {
                       maxLength: 25,
                       obscureText: !isPasswordVisible,
                       validator: (value) {
-                        if (value!.isEmpty)
-                          return 'La contraseña es obligatoria';
+                        if (value!.isEmpty) return 'La contraseña es obligatoria';
+                        if (value.length < 8) return 'La contraseña debe tener al menos 8 caracteres';
+                        if (!RegExp(r'[a-z]').hasMatch(value)) return 'La contraseña debe contener al menos una letra minúscula';
+                        if (!RegExp(r'[A-Z]').hasMatch(value)) return 'La contraseña debe contener al menos una letra mayúscula';
+                        if (!RegExp(r'[0-9]').hasMatch(value)) return 'La contraseña debe contener al menos un número';
+                        if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) return 'La contraseña debe contener al menos un caracter especial';
 
                         return null;
                       },
@@ -136,8 +163,9 @@ class RegisterPageState extends State<RegisterPage> {
                       maxLength: 25,
                       obscureText: !isPasswordVisible,
                       validator: (value) {
-                        if (value!.isEmpty)
-                          return 'La confirmación de contraseña es obligatoria';
+                        if (value!.isEmpty) return 'La confirmación de contraseña es obligatoria';
+
+                        if(passwordController.text != value) return 'Las contraseñas no coinciden';
 
                         return null;
                       },
@@ -174,7 +202,7 @@ class RegisterPageState extends State<RegisterPage> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (formKey.currentState!.validate()) {
                           print('Formulario válido');
 
@@ -186,9 +214,24 @@ class RegisterPageState extends State<RegisterPage> {
                           if (contra == concontra) {
                             print('Nombre: $nombre');
                             print('Email: $email');
-                            print('Teléfono: $telefono');
+                            print('Teléfono: $telefono)');
                             print('Contraseña: $contra');
                             print('Confirmación de contraseña: $concontra');
+
+                            final data = {
+                              'nombre': nombre,
+                              'email': email,
+                              'telefono': telefono,
+                              'contraseña': contra,
+                              'confcontra': concontra,
+                            };
+
+                            try {
+                              final instance = FirebaseFirestore.instance;
+                              final respuesta = await instance.collection('usuarios').add(data);
+                            } catch (e) {
+                              print('Error al registrar el usuario: $e');
+                            }
 
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -197,15 +240,7 @@ class RegisterPageState extends State<RegisterPage> {
                             Navigator.pushReplacementNamed(
                                 context, MyRoutes.loginroute.name);
                             return;
-                          } else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text(
-                                  'La contraseña no coincide con la confirmación de la misma'),
-                              backgroundColor: Color.fromARGB(255, 5, 93, 24),
-                            ));
-                            return;
-                          }
+                          } 
                         }
                       },
                       child: const Text('Registrate'),
