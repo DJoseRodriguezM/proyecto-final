@@ -93,40 +93,35 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 80.0),
                   ElevatedButton(
                     onPressed: () async {
-                      final String email = emailController.text;
-                      final String password = passwordController.text;
+                      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+                      final String email = emailController.text.trim();
+                      final String password = passwordController.text.trim();
 
-                      final resultados = await FirebaseFirestore.instance
-                          .collection('usuarios')
-                          .where('email', isEqualTo: email)
-                          .where('contraseña', isEqualTo: password)
-                          .get();
+                      try {
+                        // Consultar la colección 'usuarios' en Firestore para el email y contraseña dada
+                        final QuerySnapshot<Map<String, dynamic>> userDoc= await firestore
+                            .collection('usuarios')
+                            .where('email', isEqualTo: email)
+                            .where('contraseña', isEqualTo: password)
+                            .limit(1)
+                            .get();
 
-                      final List<DocumentSnapshot> documentos = resultados.docs;  
-                      if (documentos.length == 1) {
-                        // Comprueba si la contraseña es correcta
-                        if (documentos[0]['contraseña'] == password) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => InicioPage()));
+                        // Verificar si se encontró un usuario con la documentación dada
+                        if (userDoc.docs.isNotEmpty) {
+                            Navigator.pushReplacementNamed(
+                              context,
+                              MyRoutes.Inicioroute.name,
+                            );
                         } else {
-                        // Si las credenciales son incorrectas, muestra un mensaje de error
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Credenciales incorrectas'),
-                            backgroundColor: Color.fromARGB(255, 5, 93, 24),
-                          ),
-                        );
-                      }
-                      } else {
-                        // Si las credenciales son incorrectas, muestra un mensaje de error
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Credenciales incorrectas'),
-                            backgroundColor: Color.fromARGB(255, 5, 93, 24),
-                          ),
-                        );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('No se encontró un usuario con ese correo electrónico.'),
+                              backgroundColor: Color.fromARGB(255, 5, 93, 24),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        print('Error: $e');
                       }
                     },
                     style: ElevatedButton.styleFrom(
