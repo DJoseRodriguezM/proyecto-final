@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:descendencia/pantallas/components/animal_page.dart';
 import 'package:descendencia/pantallas/components/almacenamiento_page.dart';
 import 'package:descendencia/pantallas/components/personal_page.dart';
-import 'package:descendencia/pantallas/components/calendar_page.dart';
+import 'package:descendencia/pantallas/components/screens/calendar_page.dart';
 import 'package:descendencia/pantallas/components/general_page.dart';
 
 
