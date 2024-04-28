@@ -59,4 +59,5 @@ class DefaultFirebaseOptions {
     projectId: 'livestock-control-lp24',
     storageBucket: 'livestock-control-lp24.appspot.com',
   );
+
 }

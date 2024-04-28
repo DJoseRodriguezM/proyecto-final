@@ -65,7 +65,7 @@ class _InicioPageState extends State<InicioPage> {
             label: 'Ajustes',
           ),
         ],
-        selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
+        selectedItemColor: Color.fromARGB(255, 255, 255, 255),
         unselectedItemColor: const Color.fromARGB(255, 0, 0, 0),
       ),
     );

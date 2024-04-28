@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:descendencia/pantallas/login_page.dart';
-// Importa la pantalla de notificaciones
+// Pendiente Permisos Notificaciones
 // import 'package:descendencia/pantallas/notificaciones_page.dart';
 
 class AjustesPage extends StatelessWidget {
@@ -9,7 +9,6 @@ class AjustesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Obtener el usuario actualmente autenticado
     User? user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
@@ -21,7 +20,6 @@ class AjustesPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Información de la cuenta
             const SizedBox(height: 20),
             ListTile(
               title: Text('Nombre'),
@@ -33,24 +31,19 @@ class AjustesPage extends StatelessWidget {
               subtitle: Text(user?.email ?? 'Correo no disponible'),
               leading: Icon(Icons.email),
             ),
-            // Separación
             const Divider(),
-            // Botón para ir a la sección de notificaciones
             ListTile(
               title: const Text('Notificaciones'),
               leading: Icon(Icons.notifications),
               onTap: () {
-                // Aquí puedes agregar la navegación a la pantalla de notificaciones
+                // PENDIENTE NAVEGACION DE PERMISOS DE NOTIFICACION
               },
             ),
-            // Separación
             const Divider(),
-            // Botón para mostrar permisos
             ListTile(
               title: const Text('Ver Permisos'),
               leading: Icon(Icons.security),
               onTap: () {
-                // Mostrar diálogo de permisos
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -78,24 +71,17 @@ class AjustesPage extends StatelessWidget {
                 );
               },
             ),
-            // Separación
             const Divider(),
-            // Botón para "Acerca de nosotros"
             ListTile(
               title: const Text('Sobre Nosotros'),
               leading: Icon(Icons.info),
-              onTap: () {
-                // Aquí puedes agregar la navegación a la pantalla "Acerca de nosotros"
-              },
+              onTap: () {},
             ),
-            // Separación
             const Divider(),
-            // Botón para cerrar sesión
             ListTile(
               title: const Text('Cerrar Sesión'),
               leading: Icon(Icons.logout),
               onTap: () {
-                // Cerrar sesión
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

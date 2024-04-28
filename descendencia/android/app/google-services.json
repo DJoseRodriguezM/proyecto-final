@@ -12,7 +12,44 @@
           "package_name": "hn.edu.unah.descendencia"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "621231428039-81hfqpjcq6bnc4blpg2lg69bd98l894b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hn.edu.unah.descendencia",
+            "certificate_hash": "b357e579c15e3f75913a19f468419863b7586f3a"
+          }
+        },
+        {
+          "client_id": "621231428039-98g27dk9gll43bvi1ul8gu2hg2f70gkn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hn.edu.unah.descendencia",
+            "certificate_hash": "c2dbf52702d6401f3e23ff7d6d37fc511b602939"
+          }
+        },
+        {
+          "client_id": "621231428039-af3o2dd5f933pvsk92l1a9c4iru1lgai.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hn.edu.unah.descendencia",
+            "certificate_hash": "85e5953505be4838d70765d6d1ba9cd0d168f0f4"
+          }
+        },
+        {
+          "client_id": "621231428039-fi6bpp5fu490khdg1ldmnfvngdjifccg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hn.edu.unah.descendencia",
+            "certificate_hash": "4046b30c8068593cd85b72c9cc4662bc1797ffa1"
+          }
+        },
+        {
+          "client_id": "621231428039-har8jdk7ucksoh49gll86rj4vsk7ts34.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA_Ci1ZXp6PRPJT2pvNs3cGooJqjUoJIPI"
@@ -20,7 +57,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621231428039-har8jdk7ucksoh49gll86rj4vsk7ts34.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
