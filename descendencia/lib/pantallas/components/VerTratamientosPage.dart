@@ -53,7 +53,7 @@ class VerTratamientosPage extends StatelessWidget {
                   return ListTile(
                     title: Text('Tratamiento: ${tratamiento['Nombre']}'),
                     subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text('Dosis: ${tratamiento['Dosis']}'),
                         Text('Fecha: ${tratamiento['Fecha']}'),

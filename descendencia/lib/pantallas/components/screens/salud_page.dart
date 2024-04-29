@@ -48,7 +48,6 @@ class SaludPage extends StatelessWidget {
                           child: Column(
                             children: [
                               SizedBox(height: 15.0),
-                              
                             ],
                           ),
                         ),
