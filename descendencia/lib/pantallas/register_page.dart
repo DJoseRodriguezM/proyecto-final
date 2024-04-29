@@ -67,6 +67,7 @@ class RegisterPageState extends State<RegisterPage> {
                       },
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
+                        errorMaxLines: 2,
                         labelText: 'Nombre',
                         icon: Icon(
                           Icons.person,
@@ -91,6 +92,7 @@ class RegisterPageState extends State<RegisterPage> {
                       },
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
+                        errorMaxLines: 2,
                         labelText: 'Email',
                         icon: Icon(
                           Icons.email,
@@ -114,6 +116,7 @@ class RegisterPageState extends State<RegisterPage> {
                       },
                       keyboardType: TextInputType.phone,
                       decoration: const InputDecoration(
+                        errorMaxLines: 2,
                         labelText: 'Teléfono',
                         icon: Icon(
                           Icons.phone,
@@ -138,6 +141,7 @@ class RegisterPageState extends State<RegisterPage> {
                       },
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
+                        errorMaxLines: 2,
                         labelText: 'Contraseña',
                         icon: const Icon(
                           Icons.lock,
@@ -171,6 +175,7 @@ class RegisterPageState extends State<RegisterPage> {
                       },
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
+                        errorMaxLines: 2,
                         labelText: 'Confirmar contraseña',
                         icon: const Icon(
                           Icons.lock,

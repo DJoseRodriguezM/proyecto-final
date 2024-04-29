@@ -65,6 +65,12 @@ class _NewPersonalPageState extends State<NewPersonalPage> {
                             validator: (value) {
                               if (value!.isEmpty) return 'El correo es obligatorio';
 
+                              Pattern pattern =
+                                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                              RegExp regex = RegExp(pattern.toString());
+
+                              if (!regex.hasMatch(value)) return 'Ejemplos de correos válidos: ejemplo@dominio.com o nombre.apellido@empresa.org';
+
                               return null;
                             },
                             keyboardType: TextInputType.text,
