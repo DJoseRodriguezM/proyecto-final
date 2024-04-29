@@ -25,11 +25,11 @@ class _InicioPageState extends State<InicioPage> {
             widget.currentIndex = value;
             setState(() {});
           },
-          children: const [
+          children: [
             InicioPageComp(),
-            ProduccionPage(),
-            TratamientosPage(),
-            AjustesPage(),
+            const ProduccionPage(),
+            const TratamientosPage(),
+            const AjustesPage(),
           ]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: widget.currentIndex,

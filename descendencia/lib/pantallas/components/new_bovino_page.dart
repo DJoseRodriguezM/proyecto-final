@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,11 +9,17 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class NewBovino extends StatefulWidget {
+
+  String? bovinoID = '';
+
+
+  NewBovino({super.key, this.bovinoID});
   @override
   _NewBovinoState createState() => _NewBovinoState();
 }
 
 class _NewBovinoState extends State<NewBovino> {
+  
   final identificacionController = TextEditingController();
   final pesoController = TextEditingController();
   final propositoController = TextEditingController();
@@ -24,28 +32,55 @@ class _NewBovinoState extends State<NewBovino> {
 
   final formKey = GlobalKey<FormState>();
   final instance = FirebaseFirestore.instance;
+  final storage = FirebaseStorage.instance.ref();
 
   String? imgUrl;
+  List<String> imagesUrls = [];
 
   List<String> bovinoListHembra = ['No Registrada'];
   List<String> bovinoListMacho = ['No Registrado'];
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
-      final bovinos = await instance.collection('Bovinos').get();
-      setState(() {
-        bovinoListHembra.addAll(bovinos.docs
-            .where((bovino) => bovino['Sexo'] == 'Hembra')
-            .map((bovino) => bovino['Identificacion'] as String));
+void initState() {
+  super.initState();
 
-        bovinoListMacho.addAll(bovinos.docs
-            .where((bovino) => bovino['Sexo'] == 'Macho')
-            .map((bovino) => bovino['Identificacion'] as String));
-      });
+  _fetchData();
+
+}
+
+void _fetchData() async {
+final bovinos = await instance.collection('Bovinos').get();
+    setState(() {
+      bovinoListHembra.addAll(bovinos.docs
+          .where((bovino) => bovino['Sexo'] == 'Hembra')
+          .map((bovino) => bovino['Identificacion'] as String));
+
+      bovinoListMacho.addAll(bovinos.docs
+          .where((bovino) => bovino['Sexo'] == 'Macho')
+          .map((bovino) => bovino['Identificacion'] as String));
     });
-  }
+    // print(widget.bovinoID);
+
+    if (widget.bovinoID != null && widget.bovinoID!.isNotEmpty) {
+      final bovinoDoc = await instance.collection('Bovinos').doc(widget.bovinoID).get();
+      final bovinoData = bovinoDoc.data();
+
+      if (bovinoData != null) {
+        identificacionController.text = bovinoData['Identificacion'];
+        pesoController.text = bovinoData['Peso'].toString();
+        propositoController.text = bovinoData['Proposito'];
+        razaController.text = bovinoData['Raza'];
+        saludController.text = bovinoData['Estado'];
+        fechaNacimientoController.text = bovinoData['FechaNacimiento'].toDate().toString().substring(0,10);
+        sexoController.text = bovinoData['Sexo'];
+        padreController.text = bovinoData['Padre'];
+        madreController.text = bovinoData['Madre'];
+        imgUrl = bovinoData['perfilV'] ?? '';
+        imagesUrls = List<String>.from(bovinoData['Fotos']) ?? [];
+      }
+    }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -281,6 +316,159 @@ class _NewBovinoState extends State<NewBovino> {
                           const SizedBox(height: 16.0),
                           ElevatedButton(
                             onPressed: () async {
+                              final ImagePicker picker = ImagePicker();
+                              XFile? image = await picker.pickImage(
+                                  source: ImageSource.gallery);
+
+                              if (image != null) {
+                                Reference imagenRef = storage.child(
+                                    'images/${DateTime.now().millisecondsSinceEpoch}.jpg');
+
+                                try {
+                                  await imagenRef.putFile(File(image.path));
+                                  imgUrl = await imagenRef.getDownloadURL();
+                                  print('Imagen subida exitosamente: $imgUrl');
+                                } catch (e) {
+                                  print('Error al subir la imagen: $e');
+                                }
+                              }
+                              setState(() {});
+                            },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              minimumSize: const Size(double.infinity, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 15,
+                                horizontal: 50,
+                              ),
+                              backgroundColor:
+                                  const Color.fromARGB(255, 5, 93, 24),
+                            ),
+                            child: const Text(
+                              'Foto de Perfil (Opcional)',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Color.fromARGB(255, 210, 210, 210),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          // Si la imagen se ha subido con éxito, muestra un cuadro con la imagen
+                          if (imgUrl != null && imgUrl!.isNotEmpty && imgUrl != '')
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.network(imgUrl!),
+                            ),
+                          const SizedBox(height: 16.0),
+                          ElevatedButton(
+                            onPressed: () async {
+                              final ImagePicker picker = ImagePicker();
+                              List<XFile>? images =
+                                  await picker.pickMultiImage();
+
+                              if (images != null) {
+                                for (var image in images) {
+                                  Reference imagenRef = storage.child(
+                                      'images/${DateTime.now().millisecondsSinceEpoch}.jpg');
+
+                                  try {
+                                    await imagenRef.putFile(File(image.path));
+                                    String imagesUrl =
+                                        await imagenRef.getDownloadURL();
+                                    print(
+                                        'Imagen subida exitosamente: $imagesUrl');
+
+                                    // Agrega la URL de la imagen a la lista de URLs de imágenes
+                                    imagesUrls.add(imagesUrl);
+                                  } catch (e) {
+                                    print('Error al subir la imagen: $e');
+                                  }
+                                }
+                              }
+                              setState(() {});
+                            },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              minimumSize: const Size(double.infinity, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 15,
+                                horizontal: 50,
+                              ),
+                              backgroundColor:
+                                  const Color.fromARGB(255, 5, 93, 24),
+                            ),
+                            child: const Text(
+                              'Otras Fotos (Opcional)',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Color.fromARGB(255, 210, 210, 210),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          Wrap(
+                            spacing:
+                                10, // Espacio horizontal entre las imágenes
+                            runSpacing:
+                                10, // Espacio vertical entre las imágenes
+                            children: [
+                              for (var imagesUrl in imagesUrls)
+                                Stack(
+                                  children: [
+                                    Container(
+                                      width: 100, // Ancho de la imagen
+                                      height: 100, // Altura de la imagen
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: Image.network(imagesUrl,
+                                            fit: BoxFit.cover),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: -10,
+                                      right: -10,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Color.fromARGB(
+                                                        21, 75, 75, 75)
+                                                    .withOpacity(0.2),
+                                                spreadRadius: 1,
+                                                blurRadius: 3,
+                                                offset: Offset(0, 1),
+                                              ),
+                                            ],
+                                          ),
+                                          child: IconButton(
+                                            icon: Icon(Icons.close,
+                                                color: const Color.fromARGB(
+                                                    156, 244, 67, 54)),
+                                            onPressed: () {
+                                              setState(() {
+                                                imagesUrls.remove(imagesUrl);
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 16.0),
+                          ElevatedButton(
+                            onPressed: () async {
                               if (formKey.currentState!.validate()) {
                                 final data = {
                                   'Identificacion':
@@ -289,24 +477,36 @@ class _NewBovinoState extends State<NewBovino> {
                                   'Proposito': propositoController.text,
                                   'Raza': razaController.text,
                                   'Estado': saludController.text,
-                                  'perfilV': '',
-                                  'FechaNacimiento': Timestamp.fromDate(DateTime.parse(fechaNacimientoController.text)),
+                                  'perfilV': imgUrl ?? '',
+                                  'FechaNacimiento': Timestamp.fromDate(
+                                      DateTime.parse(
+                                          fechaNacimientoController.text)),
                                   'Sexo': sexoController.text,
                                   'Padre': padreController.text,
                                   'Madre': madreController.text,
+                                  'Fotos': imagesUrls,
                                 };
                                 try {
+                                  if (widget.bovinoID != null &&
+                                      widget.bovinoID!.isNotEmpty) {
+                                    await instance
+                                        .collection('Bovinos')
+                                        .doc(widget.bovinoID)
+                                        .update(data);
+                                  } else {
                                   await instance
                                       .collection('Bovinos')
                                       .add(data);
+                                  }
                                 } catch (e) {
-                                  print('Error al agregar el bovino: $e');
+                                  print('Error al guardar el bovino: $e');
                                 }
 
                                 ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
+                                    .showSnackBar( SnackBar(
                                   content:
-                                      Text('Bovino agregado correctamente'),
+                        
+                                      Text(widget.bovinoID != null && widget.bovinoID!.isNotEmpty ? "Bovino actualizado correctamente" : "Bovino agregado correctamente",),
                                 ));
 
                                 Navigator.pop(context);
@@ -325,9 +525,10 @@ class _NewBovinoState extends State<NewBovino> {
                               backgroundColor:
                                   const Color.fromARGB(255, 5, 93, 24),
                             ),
-                            child: const Text(
-                              "Agregar",
-                              style: TextStyle(
+                            
+                            child: Text(
+                              widget.bovinoID != null && widget.bovinoID!.isNotEmpty ? "Guardar" : "Agregar",
+                              style: const TextStyle(
                                 fontSize: 18,
                               ),
                             ),

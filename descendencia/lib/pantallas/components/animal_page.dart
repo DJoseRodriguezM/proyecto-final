@@ -112,6 +112,7 @@ class _AnimalPageState extends State<AnimalPage> {
                                       fit: BoxFit.cover,
                                       height: 60.0,
                                       width: 60.0,
+                                      
                                     )
                                   : Image.asset(
                                       //si NO HAY una ruta de imagen en la base de datos, carga una local
@@ -131,13 +132,9 @@ class _AnimalPageState extends State<AnimalPage> {
                             subtitle: Text(bovino['Proposito']),
                             trailing: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(bovino['Raza']),
-                                const SizedBox(
-                                    width:
-                                        8), // Espacio entre la raza y el peso
-                                Text(bovino['Peso'].toString()),
-                                Text(bovino['Estado'])
                               ],
                             ),
                           ),

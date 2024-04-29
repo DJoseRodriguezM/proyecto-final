@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import './bovino_screen.dart';
+import './../new_bovino_page.dart';
 
 class DatosPage extends StatefulWidget {
   final String bovinoNombre;
@@ -66,6 +67,21 @@ class _DatosPageState extends State<DatosPage> {
           title: const Text("Datos Generales"),
           foregroundColor: Colors.white,
           backgroundColor: const Color.fromARGB(255, 5, 93, 24),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NewBovino(
+                      bovinoID: bovinoID,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
         // Resto del código
         body: StreamBuilder<DocumentSnapshot>(
@@ -140,7 +156,8 @@ class _DatosPageState extends State<DatosPage> {
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.bold)),
                               const SizedBox(height: 15.0),
-                              Text('Fecha de Nacimiento: ${bovino['FechaNacimiento'].toDate().toString().substring(0, 10)}',
+                              Text(
+                                  'Fecha de Nacimiento: ${bovino['FechaNacimiento'].toDate().toString().substring(0, 10)}',
                                   textAlign: TextAlign.left,
                                   style: const TextStyle(
                                       fontSize: 20.0,
@@ -181,6 +198,94 @@ class _DatosPageState extends State<DatosPage> {
                                             fontSize: 20.0,
                                             fontWeight: FontWeight.bold)),
                                     buildBovinoCard(madreID),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 15.0),
+                              const Text('Fotos:',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold)),
+                              const SizedBox(height: 15.0),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Wrap(
+                                      spacing:
+                                          5, // Espacio horizontal entre las imágenes
+                                      runSpacing:
+                                          10, // Espacio vertical entre las imágenes
+                                      children: [
+                                        for (var imagesUrl in bovino['Fotos'])
+                                          GestureDetector(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return Dialog(
+                                                    child: Image.network(
+                                                        imagesUrl,
+                                                        fit: BoxFit.cover),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Stack(
+                                              children: [
+                                                Container(
+                                                  width:
+                                                      100, // Ancho de la imagen
+                                                  height:
+                                                      100, // Altura de la imagen
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    child: Image.network(
+                                                        imagesUrl,
+                                                        fit: BoxFit.cover),
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                  top: -10,
+                                                  right: -10,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: Color
+                                                                    .fromARGB(
+                                                                        21,
+                                                                        75,
+                                                                        75,
+                                                                        75)
+                                                                .withOpacity(
+                                                                    0.2),
+                                                            spreadRadius: 1,
+                                                            blurRadius: 3,
+                                                            offset:
+                                                                Offset(0, 1),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),

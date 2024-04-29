@@ -1,9 +1,73 @@
-import 'package:flutter/material.dart';
-import 'package:descendencia/routes.dart';
-import 'package:horizontal_calendar/horizontal_calendar.dart';
+import 'dart:collection';
 
-class InicioPageComp extends StatelessWidget {
-  const InicioPageComp({Key? key});
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:descendencia/routes.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:descendencia/pantallas/components/model/event.dart';
+
+class InicioPageComp extends StatefulWidget {
+  const InicioPageComp({super.key});
+
+  @override
+  State<InicioPageComp> createState() => _InicioPageCompState();
+}
+
+class _InicioPageCompState extends State<InicioPageComp> {
+
+  late DateTime _focusedDay;
+  late DateTime _firstDay;
+  late DateTime _lastDay;
+  late DateTime _selectedDay;
+  late CalendarFormat _calendarFormat;
+  late Map<DateTime, List<Event>> _events;
+    int getHashCode(DateTime key) {
+    return key.day * 1000000 + key.month * 10000 + key.year;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _events = LinkedHashMap(
+      equals: isSameDay,
+      hashCode: getHashCode,
+    );
+    _focusedDay = DateTime.now();
+    _firstDay = DateTime.now().subtract(const Duration(days: 5000));
+    _lastDay = DateTime.now().add(const Duration(days: 5000));
+    _selectedDay = DateTime.now();
+    _calendarFormat = CalendarFormat.week;
+    _loadFirestoreEvents();
+  }
+
+  _loadFirestoreEvents() async {
+    final firstDay = DateTime(_focusedDay.year, _focusedDay.month, 1);
+    final lastDay = DateTime(_focusedDay.year, _focusedDay.month + 1, 0);
+    _events = {};
+
+    final snap = await FirebaseFirestore.instance
+        .collection('events')
+        .where('date', isGreaterThanOrEqualTo: firstDay)
+        .where('date', isLessThanOrEqualTo: lastDay)
+        .withConverter(
+            fromFirestore: Event.fromFirestore,
+            toFirestore: (event, options) => event.toFirestore())
+        .get();
+    for (var doc in snap.docs) {
+      final event = doc.data();
+      final day =
+          DateTime.utc(event.date.year, event.date.month, event.date.day);
+      if (_events[day] == null) {
+        _events[day] = [];
+      }
+      _events[day]!.add(event);
+    }
+    setState(() {});
+  }
+
+  List<Event> _getEventsForTheDay(DateTime day) {
+    return _events[day] ?? [];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,20 +83,62 @@ class InicioPageComp extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              HorizontalCalendar(
-                date: DateTime.now(),
-                initialDate: DateTime.now(),
-                textColor: Colors.black,
-                backgroundColor: Colors.white,
-                selectedColor: Colors.orange,
-                showMonth: true,
-                locale: Localizations.localeOf(context),
-                onDateSelected: (date) {
-                  // if (kDebugMode) {
-                  //   print(date.toString());
-                  // }
-                },
+              TableCalendar(
+              eventLoader: _getEventsForTheDay,
+              calendarFormat: _calendarFormat,
+              startingDayOfWeek: StartingDayOfWeek.monday,
+              onFormatChanged: (format) {
+                setState(() {
+                  _calendarFormat = format;
+                });
+              },
+              focusedDay: _focusedDay,
+              firstDay: _firstDay,
+              lastDay: _lastDay,
+              onPageChanged: (focusedDay) {
+                setState(() {
+                  _focusedDay = focusedDay;
+                });
+                _loadFirestoreEvents();
+              },
+              selectedDayPredicate: (day) => isSameDay(day, _selectedDay),
+              onDaySelected: (selectedDay, focusedDay) {
+                print(_events[selectedDay]);
+                setState(() {
+                  _selectedDay = selectedDay;
+                  _focusedDay = focusedDay;
+                });
+              },
+              availableGestures: AvailableGestures.all,
+              headerStyle: const HeaderStyle(
+                titleTextStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Color.fromARGB(255, 5, 93, 24),
+                ),
+                formatButtonVisible: false,
+                titleCentered: true,
+                rightChevronIcon: Icon(
+                  Icons.chevron_right,
+                  size: 16,
+                  color: Color.fromARGB(255, 5, 93, 24),
+                ),
+                leftChevronIcon: Icon(
+                  Icons.chevron_left,
+                  size: 16,
+                  color: Color.fromARGB(255, 5, 93, 24),
+                ),
               ),
+              calendarStyle: const CalendarStyle(
+                weekendTextStyle: TextStyle(
+                  color: Color.fromARGB(255, 5, 93, 24),
+                ),
+                selectedDecoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color.fromARGB(255, 5, 93, 24),
+                ),
+              ),
+            ),
               const SizedBox(height: 50.0),
               ElevatedButton(
                 onPressed: () {
