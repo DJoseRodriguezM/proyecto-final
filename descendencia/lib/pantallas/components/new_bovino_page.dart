@@ -4,8 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
-class NewBovino extends StatelessWidget {
-  NewBovino({super.key});
+class NewBovino extends StatefulWidget {
+  @override
+  _NewBovinoState createState() => _NewBovinoState();
+}
+
+class _NewBovinoState extends State<NewBovino> {
   final identificacionController = TextEditingController();
   final pesoController = TextEditingController();
   final propositoController = TextEditingController();
@@ -17,6 +21,27 @@ class NewBovino extends StatelessWidget {
   final madreController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
+  final instance = FirebaseFirestore.instance;
+
+  List<String> bovinoListHembra = ['No Registrada'];
+  List<String> bovinoListMacho = ['No Registrado'];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      final bovinos = await instance.collection('Bovinos').get();
+      setState(() {
+        bovinoListHembra.addAll(bovinos.docs
+            .where((bovino) => bovino['Sexo'] == 'Hembra')
+            .map((bovino) => bovino['Identificacion'] as String));
+
+        bovinoListMacho.addAll(bovinos.docs
+            .where((bovino) => bovino['Sexo'] == 'Macho')
+            .map((bovino) => bovino['Identificacion'] as String));
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +71,14 @@ class NewBovino extends StatelessWidget {
                           TextFormField(
                             controller: identificacionController,
                             validator: (value) {
-                              if (value!.isEmpty) return 'La identificacion es obligatoria';
+                              if (value!.isEmpty) {
+                                return 'El nombre es obligatorio';
+                              }
+
+                              if (bovinoListHembra.contains(value) ||
+                                  bovinoListMacho.contains(value)) {
+                                return 'El nombre ya existe';
+                              }
 
                               return null;
                             },
@@ -60,7 +92,9 @@ class NewBovino extends StatelessWidget {
                           TextFormField(
                             controller: fechaNacimientoController,
                             validator: (value) {
-                              if (value!.isEmpty) return 'La fecha de nacimiento es obligatoria';
+                              if (value!.isEmpty) {
+                                return 'La fecha de nacimiento es obligatoria';
+                              }
 
                               return null;
                             },
@@ -93,7 +127,7 @@ class NewBovino extends StatelessWidget {
                               border: OutlineInputBorder(),
                               labelText: 'Sexo',
                             ),
-                            items: <String>['Hembra', 'Macho']
+                            items: <String>['Macho', 'Hembra']
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
@@ -104,7 +138,9 @@ class NewBovino extends StatelessWidget {
                               sexoController.text = newValue!;
                             },
                             validator: (value) {
-                              if (value!.isEmpty) return 'El sexo es obligatorio';
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor selecciona una opción';
+                              }
 
                               return null;
                             },
@@ -113,7 +149,9 @@ class NewBovino extends StatelessWidget {
                           TextFormField(
                             controller: pesoController,
                             validator: (value) {
-                              if (value!.isEmpty) return 'El peso es obligatorio';
+                              if (value!.isEmpty) {
+                                return 'El peso es obligatorio';
+                              }
 
                               return null;
                             },
@@ -127,7 +165,9 @@ class NewBovino extends StatelessWidget {
                           TextFormField(
                             controller: razaController,
                             validator: (value) {
-                              if (value!.isEmpty) return 'La raza es obligatoria';
+                              if (value!.isEmpty) {
+                                return 'La raza es obligatoria';
+                              }
 
                               return null;
                             },
@@ -146,7 +186,7 @@ class NewBovino extends StatelessWidget {
                               border: OutlineInputBorder(),
                               labelText: 'Padre',
                             ),
-                            items: <String>['Padre1', 'Padre2', 'Padre3']
+                            items: bovinoListMacho
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
@@ -157,7 +197,9 @@ class NewBovino extends StatelessWidget {
                               padreController.text = newValue!;
                             },
                             validator: (value) {
-                              if (value!.isEmpty) return 'El campo padre es obligatorio';
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor selecciona una opción';
+                              }
 
                               return null;
                             },
@@ -171,7 +213,7 @@ class NewBovino extends StatelessWidget {
                               border: OutlineInputBorder(),
                               labelText: 'Madre',
                             ),
-                            items: <String>['Madre1', 'Madre2', 'Madre3']
+                            items: bovinoListHembra
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
@@ -182,7 +224,9 @@ class NewBovino extends StatelessWidget {
                               madreController.text = newValue!;
                             },
                             validator: (value) {
-                              if (value!.isEmpty) return 'El campo Madre es obligatorio';
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor selecciona una opción';
+                              }
 
                               return null;
                             },
@@ -207,7 +251,9 @@ class NewBovino extends StatelessWidget {
                               propositoController.text = newValue!;
                             },
                             validator: (value) {
-                              if (value!.isEmpty) return 'El proposito es obligatorio';
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor selecciona una opción';
+                              }
 
                               return null;
                             },
@@ -216,7 +262,9 @@ class NewBovino extends StatelessWidget {
                           TextFormField(
                             controller: saludController,
                             validator: (value) {
-                              if (value!.isEmpty) return 'El estado es obligatorio';
+                              if (value!.isEmpty) {
+                                return 'El estado es obligatorio';
+                              }
 
                               return null;
                             },
@@ -233,15 +281,17 @@ class NewBovino extends StatelessWidget {
                                 final data = {
                                   'Identificacion':
                                       identificacionController.text,
-                                  'Peso': pesoController.text,
+                                  'Peso': num.parse(pesoController.text),
                                   'Proposito': propositoController.text,
                                   'Raza': razaController.text,
                                   'Estado': saludController.text,
-                                  'perfilV': ''
+                                  'perfilV': '',
+                                  'FechaNacimiento': Timestamp.fromDate(DateTime.parse(fechaNacimientoController.text)),
+                                  'Sexo': sexoController.text,
+                                  'Padre': padreController.text,
+                                  'Madre': madreController.text,
                                 };
-
                                 try {
-                                  final instance = FirebaseFirestore.instance;
                                   await instance
                                       .collection('Bovinos')
                                       .add(data);
@@ -284,8 +334,6 @@ class NewBovino extends StatelessWidget {
                   ),
                 ],
               ),
-
-              // Contenido de la página
             )));
   }
 }

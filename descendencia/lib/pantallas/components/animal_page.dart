@@ -14,6 +14,7 @@ class _AnimalPageState extends State<AnimalPage> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   int x = 1;
 
+
   @override
   Widget build(BuildContext context) {
     final bovinos = firestore.collection('Bovinos').snapshots();
@@ -32,104 +33,27 @@ class _AnimalPageState extends State<AnimalPage> {
 
             return Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            x = 1; // Cambia esto al valor que quieras asignar a x
-                          });
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.green), // Color de fondo del botón
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 12), // Padding del botón
-                          ),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(30), // Radio del borde
-                            ),
-                          ),
-                        ),
-                        child: const Text(
-                          'Todos',
-                          style: TextStyle(
-                            color: Colors.white, // Color del texto
-                            fontSize: 16, // Tamaño del texto
-                          ),
-                        ),
+                Container(
+                  color: const Color.fromARGB(255, 209, 209, 209),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SizedBox(
+                      height: 50, // Ajusta esto al tamaño de tus botones
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          boton('Todos', 1, Colors.green),
+                          const SizedBox(width: 10), // Espacio entre botones
+                          boton('Leche', 2, Colors.green),
+                          const SizedBox(width: 10), // Espacio entre botones
+                          boton('Carne', 3, Colors.green),
+                          const SizedBox(width: 10), // Espacio entre botones
+                          boton('Machos', 4, const Color.fromARGB(255, 12, 115, 200)), 
+                          const SizedBox(width: 10), // Espacio entre botones
+                          boton('Hembras', 5, const Color.fromARGB(255, 175, 44, 198)),
+                        ],
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Acción del botón
-                          setState(() {
-                            x = 2; // Cambia esto al valor que quieras asignar a x
-                          });
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.green), // Color de fondo del botón
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 12), // Padding del botón
-                          ),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(30), // Radio del borde
-                            ),
-                          ),
-                        ),
-                        child: const Text(
-                          'Leche',
-                          style: TextStyle(
-                            color: Colors.white, // Color del texto
-                            fontSize: 16, // Tamaño del texto
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Acción del botón
-                          setState(() {
-                            x = 3; // Cambia esto al valor que quieras asignar a x
-                          });
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.green), // Color de fondo del botón
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 12), // Padding del botón
-                          ),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(30), // Radio del borde
-                            ),
-                          ),
-                        ),
-                        child: const Text(
-                          'Carne',
-                          style: TextStyle(
-                            color: Colors.white, // Color del texto
-                            fontSize: 16, // Tamaño del texto
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
                 Expanded(
@@ -139,7 +63,11 @@ class _AnimalPageState extends State<AnimalPage> {
                       : listaBovinos
                           .where((bovino) => x == 2
                               ? bovino['Proposito'] == 'Leche'
-                              : bovino['Proposito'] == 'Carne')
+                              : x == 3
+                                  ? bovino['Proposito'] == 'Carne'
+                                  : x == 4
+                                      ? bovino['Sexo'] == 'Macho'
+                                      : bovino['Sexo'] == 'Hembra')
                           .length,
                   itemBuilder: (context, index) {
                     final bovino = x == 1
@@ -147,7 +75,11 @@ class _AnimalPageState extends State<AnimalPage> {
                         : listaBovinos
                             .where((bovino) => x == 2
                                 ? bovino['Proposito'] == 'Leche'
-                                : bovino['Proposito'] == 'Carne')
+                                : x == 3
+                                    ? bovino['Proposito'] == 'Carne'
+                                    : x == 4
+                                        ? bovino['Sexo'] == 'Macho'
+                                        : bovino['Sexo'] == 'Hembra')
                             .toList()[index];
 
                     return Column(
@@ -234,12 +166,44 @@ class _AnimalPageState extends State<AnimalPage> {
       ),
     );
   }
+
+  Widget boton(String texto, int valor, Color color) {
+    return ElevatedButton(
+      onPressed: () {
+        // Acción del botón
+        setState(() {
+          x = valor; // Cambia esto al valor que quieras asignar a x
+        });
+      },
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(
+            color), // Color de fondo del botón
+        padding: MaterialStateProperty.all<EdgeInsets>(
+          const EdgeInsets.symmetric(
+              horizontal: 6, vertical: 6), // Padding del botón
+        ),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10), // Radio del borde
+          ),
+        ),
+      ),
+      child: Text(
+        texto,
+        style: const TextStyle(
+          color: Colors.white, // Color del texto
+          fontSize: 14, // Tamaño del texto
+        ),
+      ),
+    );
+  }
 }
 
 class SecondaryButton extends StatelessWidget {
-  const SecondaryButton({Key? key, required this.text, this.onPressed});
+  const SecondaryButton({super.key, required this.text, this.onPressed});
 
   final String text;
+  
   final Function()? onPressed;
 
   @override
