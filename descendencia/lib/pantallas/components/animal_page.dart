@@ -166,28 +166,30 @@ class _AnimalPageState extends State<AnimalPage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => BovinoScreen(
-                                      bovinoNombre: bovino['Identificacion'],
-                                      bovinoID: bovino.id,
-                                      ),
+                                    bovinoNombre: bovino['Identificacion'],
+                                    bovinoID: bovino.id,
+                                  ),
                                 ),
                               );
                             },
                             leading: ClipRRect(
-                                borderRadius: BorderRadius.circular(5.0),
-                                child: bovino['perfilV'] != '' //si hay una ruta de imagen en la base de datos
-                                    ? Image.network(
-                                        bovino['perfilV'],
-                                        fit: BoxFit.cover,
-                                        height: 60.0,
-                                        width: 60.0,
-                                      )
-                                    : Image.asset( //si NO HAY una ruta de imagen en la base de datos, carga una local
-                                        'assets/perfilV.png',
-                                        fit: BoxFit.cover,
-                                        height: 60.0,
-                                        width: 60.0,
-                                      ),
-                              ),
+                              borderRadius: BorderRadius.circular(5.0),
+                              child: bovino['perfilV'] !=
+                                      '' //si hay una ruta de imagen en la base de datos
+                                  ? Image.network(
+                                      bovino['perfilV'],
+                                      fit: BoxFit.cover,
+                                      height: 60.0,
+                                      width: 60.0,
+                                    )
+                                  : Image.asset(
+                                      //si NO HAY una ruta de imagen en la base de datos, carga una local
+                                      'assets/perfilV.png',
+                                      fit: BoxFit.cover,
+                                      height: 60.0,
+                                      width: 60.0,
+                                    ),
+                            ),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16.0, vertical: 8.0),
                             title: Text(
