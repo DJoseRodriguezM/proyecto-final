@@ -1,5 +1,6 @@
 // import 'package:componentes/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:descendencia/pantallas/components/new_personal_page.dart';
 import 'package:flutter/material.dart';
 
 class PersonalPage extends StatefulWidget {
@@ -10,7 +11,7 @@ class PersonalPage extends StatefulWidget {
 }
 
 class _PersonalPageState extends State<PersonalPage> {
-
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +25,7 @@ class _PersonalPageState extends State<PersonalPage> {
           children: [
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance.collection('empleados').snapshots(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return const Text('Algo salió mal');
                 }
@@ -60,9 +61,19 @@ class _PersonalPageState extends State<PersonalPage> {
                 );
               },
             ),
-            // El resto de tu código...
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const NewPersonalPage()),
+          );
+        },
+        tooltip: 'Nuevo Empleado',
+        backgroundColor: const Color.fromARGB(255, 5, 93, 24),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

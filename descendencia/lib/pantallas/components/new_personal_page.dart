@@ -103,11 +103,16 @@ class _NewPersonalPageState extends State<NewPersonalPage> {
                           ElevatedButton(
                             onPressed: () async {
                               if (formKey.currentState!.validate()) {
+                                final nombre = nombreController.text;
+                                final correo = correoController.text;
                                 final data = {
-                                  'nombre': nombreController.text,
-                                  'correo': correoController.text,
-                                  'cargo': cargoController.text,
+                                  'nombre': nombre,
+                                  'correo': correo,
+                                  'cargo': cargo,
                                 };
+
+                                nombreController.clear();
+                                correoController.clear();
 
                                 try {
                                   final instance = FirebaseFirestore.instance;
