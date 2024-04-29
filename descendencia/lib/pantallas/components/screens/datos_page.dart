@@ -7,12 +7,11 @@ class DatosPage extends StatelessWidget {
   final String bovinoNombre;
   final String bovinoID;
 
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
   DatosPage({required this.bovinoNombre, required this.bovinoID});
 
   @override
   Widget build(BuildContext context) {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     return Scaffold(
         appBar: AppBar(
           title: Text("Datos Generales"),

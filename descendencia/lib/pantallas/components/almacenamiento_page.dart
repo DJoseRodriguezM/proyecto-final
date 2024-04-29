@@ -11,7 +11,7 @@ class AlmacenamientoPage extends StatelessWidget {
         foregroundColor: Colors.white,
         backgroundColor: const Color.fromARGB(255, 5, 93, 24),
       ),
-      body: SafeArea(
+      body: const SafeArea(
         child: Column(
           children: [],
         ),

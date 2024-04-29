@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:descendencia/pantallas/InicioPage.dart';
+import 'package:descendencia/pantallas/inicioPage.dart';
 import 'package:descendencia/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:descendencia/Widgets/InputItem.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 Future<UserCredential> signInWithGoogle() async {
@@ -110,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                         if (userDoc.docs.isNotEmpty) {
                             Navigator.pushReplacementNamed(
                               context,
-                              MyRoutes.Inicioroute.name,
+                              MyRoutes.inicioroute.name,
                             );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -178,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                               })
                           .catchError(
                         (error) {
-                          print('Error: $error');
+                          return <Future<dynamic>>{Future.error(error)};
                         },
                       );
                     },

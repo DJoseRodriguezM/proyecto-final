@@ -228,14 +228,14 @@ class RegisterPageState extends State<RegisterPage> {
 
                             try {
                               final instance = FirebaseFirestore.instance;
-                              final respuesta = await instance.collection('usuarios').add(data);
+                              await instance.collection('usuarios').add(data);
                             } catch (e) {
                               print('Error al registrar el usuario: $e');
                             }
 
                             ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Registro completado')));
+                              const SnackBar(
+                                  content: Text('Registro completado')));
 
                             Navigator.pushReplacementNamed(
                                 context, MyRoutes.loginroute.name);

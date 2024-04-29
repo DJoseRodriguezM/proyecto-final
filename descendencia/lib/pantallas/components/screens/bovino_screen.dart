@@ -8,12 +8,11 @@ class BovinoScreen extends StatelessWidget {
   final String bovinoNombre;
   final String bovinoID;
 
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
   BovinoScreen({required this.bovinoNombre, required this.bovinoID});
 
   @override
   Widget build(BuildContext context) {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     return Scaffold(
         appBar: AppBar(
           title: Text(bovinoNombre),

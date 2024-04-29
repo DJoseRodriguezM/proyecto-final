@@ -24,17 +24,17 @@ class AjustesPage extends StatelessWidget {
             ListTile(
               title: Text('Nombre'),
               subtitle: Text(user?.displayName ?? 'Nombre no disponible'),
-              leading: Icon(Icons.person),
+              leading: const Icon(Icons.person),
             ),
             ListTile(
-              title: Text('Correo Electrónico'),
+              title: const Text('Correo Electrónico'),
               subtitle: Text(user?.email ?? 'Correo no disponible'),
-              leading: Icon(Icons.email),
+              leading: const Icon(Icons.email),
             ),
             const Divider(),
             ListTile(
               title: const Text('Notificaciones'),
-              leading: Icon(Icons.notifications),
+              leading: const Icon(Icons.notifications),
               onTap: () {
                 // PENDIENTE NAVEGACION DE PERMISOS DE NOTIFICACION
               },
@@ -42,14 +42,14 @@ class AjustesPage extends StatelessWidget {
             const Divider(),
             ListTile(
               title: const Text('Ver Permisos'),
-              leading: Icon(Icons.security),
+              leading: const Icon(Icons.security),
               onTap: () {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: const Text('Permisos Requeridos'),
-                      content: Column(
+                      content: const Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -74,13 +74,13 @@ class AjustesPage extends StatelessWidget {
             const Divider(),
             ListTile(
               title: const Text('Sobre Nosotros'),
-              leading: Icon(Icons.info),
+              leading: const Icon(Icons.info),
               onTap: () {},
             ),
             const Divider(),
             ListTile(
               title: const Text('Cerrar Sesión'),
-              leading: Icon(Icons.logout),
+              leading: const Icon(Icons.logout),
               onTap: () {
                 Navigator.pushReplacement(
                   context,

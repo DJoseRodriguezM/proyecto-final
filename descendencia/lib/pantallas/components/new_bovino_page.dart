@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class NewBovino extends StatelessWidget {
+  NewBovino({super.key});
   final identificacionController = TextEditingController();
   final pesoController = TextEditingController();
   final propositoController = TextEditingController();
@@ -45,8 +46,7 @@ class NewBovino extends StatelessWidget {
                           TextFormField(
                             controller: identificacionController,
                             validator: (value) {
-                              if (value!.isEmpty)
-                                return 'La identificacion es obligatoria';
+                              if (value!.isEmpty) return 'La identificacion es obligatoria';
 
                               return null;
                             },
@@ -60,8 +60,7 @@ class NewBovino extends StatelessWidget {
                           TextFormField(
                             controller: fechaNacimientoController,
                             validator: (value) {
-                              if (value!.isEmpty)
-                                return 'La fecha de nacimiento es obligatoria';
+                              if (value!.isEmpty) return 'La fecha de nacimiento es obligatoria';
 
                               return null;
                             },
@@ -72,7 +71,7 @@ class NewBovino extends StatelessWidget {
                             ),
                             onTap: () async {
                               FocusScope.of(context).requestFocus(
-                                  new FocusNode()); // para quitar el teclado
+                                  FocusNode()); // para quitar el teclado
                               final DateTime? picked = await showDatePicker(
                                 context: context,
                                 initialDate: DateTime.now(),
@@ -105,8 +104,7 @@ class NewBovino extends StatelessWidget {
                               sexoController.text = newValue!;
                             },
                             validator: (value) {
-                              if (value!.isEmpty)
-                                return 'El sexo es obligatorio';
+                              if (value!.isEmpty) return 'El sexo es obligatorio';
 
                               return null;
                             },
@@ -115,8 +113,7 @@ class NewBovino extends StatelessWidget {
                           TextFormField(
                             controller: pesoController,
                             validator: (value) {
-                              if (value!.isEmpty)
-                                return 'El peso es obligatorio';
+                              if (value!.isEmpty) return 'El peso es obligatorio';
 
                               return null;
                             },
@@ -130,8 +127,7 @@ class NewBovino extends StatelessWidget {
                           TextFormField(
                             controller: razaController,
                             validator: (value) {
-                              if (value!.isEmpty)
-                                return 'La raza es obligatoria';
+                              if (value!.isEmpty) return 'La raza es obligatoria';
 
                               return null;
                             },
@@ -161,8 +157,7 @@ class NewBovino extends StatelessWidget {
                               padreController.text = newValue!;
                             },
                             validator: (value) {
-                              if (value!.isEmpty)
-                                return 'El campo padre es obligatorio';
+                              if (value!.isEmpty) return 'El campo padre es obligatorio';
 
                               return null;
                             },
@@ -187,8 +182,7 @@ class NewBovino extends StatelessWidget {
                               madreController.text = newValue!;
                             },
                             validator: (value) {
-                              if (value!.isEmpty)
-                                return 'El campo Madre es obligatorio';
+                              if (value!.isEmpty) return 'El campo Madre es obligatorio';
 
                               return null;
                             },
@@ -213,8 +207,7 @@ class NewBovino extends StatelessWidget {
                               propositoController.text = newValue!;
                             },
                             validator: (value) {
-                              if (value!.isEmpty)
-                                return 'El proposito es obligatorio';
+                              if (value!.isEmpty) return 'El proposito es obligatorio';
 
                               return null;
                             },
@@ -223,8 +216,7 @@ class NewBovino extends StatelessWidget {
                           TextFormField(
                             controller: saludController,
                             validator: (value) {
-                              if (value!.isEmpty)
-                                return 'El estado es obligatorio';
+                              if (value!.isEmpty) return 'El estado es obligatorio';
 
                               return null;
                             },

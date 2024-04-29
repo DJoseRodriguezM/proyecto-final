@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import './datos_page.dart';
+//import './datos_page.dart';
 
 class SaludPage extends StatelessWidget {
   final String bovinoNombre;
   final String bovinoID;
 
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
   SaludPage({required this.bovinoNombre, required this.bovinoID});
 
   @override
   Widget build(BuildContext context) {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     return Scaffold(
         appBar: AppBar(
-          title: Text("Salud"),
+          title: const Text("Salud"),
           foregroundColor: Colors.white,
           backgroundColor: const Color.fromARGB(255, 5, 93, 24),
         ),
@@ -44,11 +43,11 @@ class SaludPage extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
+                        const Padding(
+                          padding: EdgeInsets.all(12.0),
                           child: Column(
                             children: [
-                              const SizedBox(height: 15.0),
+                              SizedBox(height: 15.0),
                               
                             ],
                           ),
