@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class VerTratamientosPage extends StatelessWidget {
   final String bovinoId;
@@ -156,11 +157,11 @@ class _DetalleBovinoPageState extends State<DetalleBovinoPage> {
               InkWell(
                 onTap: _seleccionarFechaInicio,
                 child: Text(
-                  '${_fechaInicio.day}/${_fechaInicio.month}/${_fechaInicio.year}',
-                  style: TextStyle(fontSize: 16),
+                  DateFormat('dd/MM/yyyy').format(_fechaInicio),
+                  style: TextStyle(fontSize: 14),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 18),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
