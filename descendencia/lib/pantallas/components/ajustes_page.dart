@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:descendencia/pantallas/login_page.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 // Pendiente Permisos Notificaciones
 // import 'package:descendencia/pantallas/notificaciones_page.dart';
 
@@ -81,7 +82,10 @@ class AjustesPage extends StatelessWidget {
             ListTile(
               title: const Text('Cerrar Sesión'),
               leading: const Icon(Icons.logout),
-              onTap: () {
+              onTap: () async{
+                final googleSignIn = GoogleSignIn();
+                await googleSignIn.signOut();
+
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
