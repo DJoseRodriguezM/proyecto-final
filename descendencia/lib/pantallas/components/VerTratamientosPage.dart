@@ -29,43 +29,66 @@ class VerTratamientosPage extends StatelessWidget {
           ),
         ],
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('tratamientos')
-            .where('BovinoId', isEqualTo: bovinoId)
-            .snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            final tratamientos = snapshot.data!.docs;
-            if (tratamientos.isEmpty) {
-              return Center(
-                  child:
-                      Text('No hay tratamientos registrados para este bovino'));
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('tratamientos')
+              .where('BovinoId', isEqualTo: bovinoId)
+              .snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
             } else {
-              return ListView.builder(
-                itemCount: tratamientos.length,
-                itemBuilder: (context, index) {
-                  final tratamiento = tratamientos[index];
-                  return ListTile(
-                    title: Text('Tratamiento: ${tratamiento['Nombre']}'),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text('Dosis: ${tratamiento['Dosis']}'),
-                        Text('Fecha: ${tratamiento['Fecha']}'),
-                        Text('Medicamento: ${tratamiento['Medicamento']}'),
-                      ],
-                    ),
-                  );
-                },
-              );
+              final tratamientos = snapshot.data!.docs;
+              if (tratamientos.isEmpty) {
+                return Center(
+                  child:
+                      Text('No hay tratamientos registrados para este bovino'),
+                );
+              } else {
+                return ListView.builder(
+                  itemCount: tratamientos.length,
+                  itemBuilder: (context, index) {
+                    final tratamiento = tratamientos[index];
+                    return Dismissible(
+                      key: Key(tratamiento.id),
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.only(right: 20.0),
+                        child: Icon(Icons.delete, color: Colors.white),
+                      ),
+                      onDismissed: (direction) {
+                        // Implementar la lógica para eliminar el tratamiento
+                        // Utiliza la referencia del documento para eliminarlo
+                        FirebaseFirestore.instance
+                            .collection('tratamientos')
+                            .doc(tratamiento.id)
+                            .delete();
+                      },
+                      child: ListTile(
+                        leading: CircleAvatar(),
+                        title: Text('Tratamiento: ${tratamiento['Nombre']}'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Dosis: ${tratamiento['Dosis']}'),
+                            Text(
+                                'Fecha: ${DateFormat('dd/MM/yyyy').format(tratamiento['Fecha'].toDate())}'),
+                            Text('Medicamento: ${tratamiento['Medicamento']}'),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
             }
-          }
-        },
+          },
+        ),
       ),
     );
   }
@@ -92,85 +115,95 @@ class _DetalleBovinoPageState extends State<DetalleBovinoPage> {
     'Mastitis',
     'Coccidiosis',
     'Neumonía',
-    // Jose si sabes mas ponelas aqui
+    // Agrega más tratamientos si es necesario
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Agregar Tratamiento'),
+        title: const Text('Iniciar Tratamiento'),
         backgroundColor: const Color.fromARGB(255, 5, 93, 24),
         foregroundColor: Colors.white,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Seleccione el tipo de tratamiento:',
-                style: TextStyle(fontSize: 18),
-              ),
-              DropdownButton<String>(
-                value: _selectedTratamiento.isNotEmpty
-                    ? _selectedTratamiento
-                    : null,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedTratamiento = newValue!;
-                  });
-                },
-                items: nombresTratamientos.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Dosis'),
-                onChanged: (value) {
-                  setState(() {
-                    _dosis = value;
-                  });
-                },
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Medicamento'),
-                onChanged: (value) {
-                  setState(() {
-                    _medicamento = value;
-                  });
-                },
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Fecha de inicio:',
-                style: TextStyle(fontSize: 18),
-              ),
-              SizedBox(height: 10),
-              InkWell(
-                onTap: _seleccionarFechaInicio,
-                child: Text(
-                  DateFormat('dd/MM/yyyy').format(_fechaInicio),
-                  style: TextStyle(fontSize: 14),
+      body: SingleChildScrollView(
+        // Envuelve el contenido con SingleChildScrollView
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Seleccione el tipo de tratamiento:',
+                  style: TextStyle(fontSize: 16),
                 ),
-              ),
-              SizedBox(height: 18),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _guardarTratamiento();
-                  }
-                },
-                child: Text('Guardar Tratamiento'),
-              ),
-            ],
+                DropdownButton<String>(
+                  value: _selectedTratamiento.isNotEmpty
+                      ? _selectedTratamiento
+                      : null,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedTratamiento = newValue!;
+                    });
+                  },
+                  items: nombresTratamientos.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                SizedBox(height: 20),
+                Divider(),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Medicamento'),
+                  onChanged: (value) {
+                    setState(() {
+                      _medicamento = value;
+                    });
+                  },
+                ),
+                SizedBox(height: 20),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Dosis'),
+                  onChanged: (value) {
+                    setState(() {
+                      _dosis = value;
+                    });
+                  },
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Fecha de inicio:',
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 10),
+                InkWell(
+                  onTap: _seleccionarFechaInicio,
+                  child: Text(
+                    DateFormat('dd/MM/yyyy').format(_fechaInicio),
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
+                SizedBox(height: 18),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _guardarTratamiento();
+                      }
+                    },
+                    child: Text('Guardar Tratamiento'),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.green,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
