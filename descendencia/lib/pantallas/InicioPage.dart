@@ -25,11 +25,11 @@ class _InicioPageState extends State<InicioPage> {
             widget.currentIndex = value;
             setState(() {});
           },
-          children: [
+          children: const [
             InicioPageComp(),
-            const ProduccionPage(),
-            const TratamientosPage(),
-            const AjustesPage(),
+            ProduccionPage(),
+            TratamientosPage(),
+            AjustesPage(),
           ]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: widget.currentIndex,
@@ -65,7 +65,7 @@ class _InicioPageState extends State<InicioPage> {
             label: 'Ajustes',
           ),
         ],
-        selectedItemColor: const Color.fromARGB(255, 255, 255, 255),
+        selectedItemColor: Color.fromARGB(255, 255, 255, 255),
         unselectedItemColor: const Color.fromARGB(255, 0, 0, 0),
       ),
     );

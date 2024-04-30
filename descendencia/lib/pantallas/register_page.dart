@@ -217,33 +217,32 @@ class RegisterPageState extends State<RegisterPage> {
                           String contra = passwordController.text;
                           String concontra = passwordconfirmController.text;
                           if (contra == concontra) {
-                            print('Nombre: $nombre');
-                            print('Email: $email');
-                            print('Teléfono: $telefono)');
-                            print('Contraseña: $contra');
-                            print('Confirmación de contraseña: $concontra');
-
-                            final data = {
-                              'nombre': nombre,
-                              'email': email,
-                              'telefono': telefono,
-                              'contraseña': contra,
-                              'confcontra': concontra,
-                            };
-
                             try {
                               final instance = FirebaseFirestore.instance;
-                              await instance.collection('usuarios').add(data);
+                              final docRef = instance.collection('usuarios').doc();
+
+                              final data = {
+                                'nombre': nombre,
+                                'email': email,
+                                'telefono': telefono,
+                                'contraseña': contra,
+                                'confcontra': concontra,
+                                'userID': docRef.id,
+                              };
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Registro completado')));
+
+                              Navigator.pushReplacementNamed(
+                                  context, MyRoutes.general.name, arguments: docRef.id);
+
+                              // Agrega los datos al documento
+                              await docRef.set(data);
                             } catch (e) {
                               print('Error al registrar el usuario: $e');
                             }
 
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Registro completado')));
-
-                            Navigator.pushReplacementNamed(
-                                context, MyRoutes.loginroute.name);
                             return;
                           } 
                         }
