@@ -346,6 +346,7 @@ class _DatosPageState extends State<DatosPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => BovinoScreen(
+                        bovinoNombre: bovino['Identificacion'],
                         bovinoID: bovino.id,
                       ),
                     ),
