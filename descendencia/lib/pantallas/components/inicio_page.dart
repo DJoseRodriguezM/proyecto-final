@@ -30,7 +30,6 @@ class _InicioPageCompState extends State<InicioPageComp> {
       context,
       MaterialPageRoute(
         builder: (context) => BovinoScreen(
-          haciendaID: '1',
           bovinoID: qrValue,
         ),
       ),
@@ -193,7 +192,7 @@ class _InicioPageCompState extends State<InicioPageComp> {
               const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, MyRoutes.animales.name);
+                  Navigator.pushNamed(context, MyRoutes.general.name);
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,

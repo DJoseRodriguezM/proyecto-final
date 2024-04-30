@@ -23,7 +23,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Material App',
-        initialRoute: MyRoutes.loginroute.name,
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.hasError) {
+              print('Error en la autenticación: ${snapshot.error}');
+              return const LoginPage();
+            }
+            if (snapshot.hasData) {
+              return InicioPage();
+            }
+            return const LoginPage();
+          },
+        ),
+        //initialRoute: MyRoutes.loginroute.name,
         routes: routes,
         onGenerateRoute: (settings) {
           return MaterialPageRoute(

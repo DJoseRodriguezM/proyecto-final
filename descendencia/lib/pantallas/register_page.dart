@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:descendencia/pantallas/components/general_page.dart';
+import 'package:descendencia/routes.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -233,12 +233,8 @@ class RegisterPageState extends State<RegisterPage> {
                               const SnackBar(
                                   content: Text('Registro completado')));
 
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => GeneralPage(userID: docRef.id),
-                                  ), 
-                              );
+                              Navigator.pushReplacementNamed(
+                                  context, MyRoutes.general.name, arguments: docRef.id);
 
                               // Agrega los datos al documento
                               await docRef.set(data);

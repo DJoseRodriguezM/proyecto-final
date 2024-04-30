@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // componentes de la pantalla de inicio
 import 'package:descendencia/pantallas/components/inicio_page.dart';
@@ -7,8 +6,7 @@ import 'package:descendencia/pantallas/components/ajustes_page.dart';
 import 'package:descendencia/pantallas/components/tratamientos_page.dart';
 
 class InicioPage extends StatefulWidget {
-  final String haciendaID;
-  InicioPage({Key? key, required this.haciendaID, this.currentIndex = 0}) : super(key: key);
+  InicioPage({Key? key, this.currentIndex = 0}) : super(key: key);
 
   int currentIndex;
   @override
@@ -17,7 +15,6 @@ class InicioPage extends StatefulWidget {
 
 class _InicioPageState extends State<InicioPage> {
   final pageController = PageController();
-  final instance = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -28,20 +25,23 @@ class _InicioPageState extends State<InicioPage> {
             widget.currentIndex = value;
             setState(() {});
           },
-          children: [
-            const InicioPageComp(),
-            ProduccionPage(hacienda: widget.haciendaID),
-            const TratamientosPage(),
-            const AjustesPage(),
+          children: const [
+            InicioPageComp(),
+            ProduccionPage(),
+            TratamientosPage(),
+            AjustesPage(),
           ]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: widget.currentIndex,
-        onTap: (index) async {
+        onTap: (index) {
           widget.currentIndex = index;
-          setState(() {});
 
-          pageController.animateToPage(index,
-              duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+          pageController.animateToPage(
+            index,
+            curve: Curves.easeIn,
+            duration: const Duration(milliseconds: 300),
+          );
+          setState(() {});
         },
         items: [
           BottomNavigationBarItem(

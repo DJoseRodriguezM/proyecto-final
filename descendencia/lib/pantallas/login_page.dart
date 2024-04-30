@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:descendencia/pantallas/InicioPage.dart';
+import 'package:descendencia/pantallas/components/general_page.dart';
 import 'package:descendencia/pantallas/register_page.dart';
+import 'package:descendencia/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:descendencia/Widgets/InputItem.dart';
@@ -98,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       try {
                         // Consultar la colección 'usuarios' en Firestore para el email y contraseña dada
-                        final usuario = await firestore
+                        final QuerySnapshot<Map<String, dynamic>> userDoc= await firestore
                             .collection('usuarios')
                             .where('email', isEqualTo: email)
                             .where('contraseña', isEqualTo: password)
@@ -106,15 +107,19 @@ class _LoginPageState extends State<LoginPage> {
                             .get();
 
                         // Verificar si se encontró un usuario con la documentación dada
-                        await firestore.collection('hacienda').where('userID', isEqualTo: usuario.docs[0].id).get().then((value) => print(value.docs[0].id));
-
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => InicioPage(haciendaID: '1'),
-                          ), 
-                        );
+                        if (userDoc.docs.isNotEmpty) {
+                            Navigator.pushReplacementNamed(
+                              context,
+                              MyRoutes.inicioroute.name,
+                            );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('No se encontró un usuario con ese correo electrónico.'),
+                              backgroundColor: Color.fromARGB(255, 5, 93, 24),
+                            ),
+                          );
+                        }
                       } catch (e) {
                         print('Error: $e');
                       }
@@ -143,6 +148,8 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 40.0),
                   ElevatedButton(
                     onPressed: () async {
+                      final emailId = emailController.text;
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -164,6 +171,35 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      final emailId = emailController.text;
+                      signInWithGoogle()
+                          .then((UserCredential user) => {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return GeneralPage(emailId: emailId);
+                                    },
+                                  ),
+                                ),
+                              })
+                          .catchError(
+                        (error) {
+                          return <Future<dynamic>>{Future.error(error)};
+                        },
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 40),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        )),
+                    child: const Text(
+                      'Usar Google',
+                      style: TextStyle(color: Color.fromARGB(255, 5, 93, 24)),
+                    ),
+                  ),
                 ],
               ),
             ),

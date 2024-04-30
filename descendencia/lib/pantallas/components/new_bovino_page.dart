@@ -11,9 +11,9 @@ import 'package:intl/intl.dart';
 class NewBovino extends StatefulWidget {
 
   String? bovinoID = '';
-  String haciendaID;
 
-  NewBovino({super.key, this.bovinoID, required this.haciendaID});
+
+  NewBovino({super.key, this.bovinoID});
   @override
   _NewBovinoState createState() => _NewBovinoState();
 }
@@ -41,11 +41,12 @@ class _NewBovinoState extends State<NewBovino> {
   List<String> bovinoListMacho = ['No Registrado'];
 
   @override
-  void initState() {
-    super.initState();
+void initState() {
+  super.initState();
 
-    _fetchData();
-  }
+  _fetchData();
+
+}
 
 void _fetchData() async {
 final bovinos = await instance.collection('Bovinos').get();
@@ -484,7 +485,6 @@ final bovinos = await instance.collection('Bovinos').get();
                                   'Padre': padreController.text,
                                   'Madre': madreController.text,
                                   'Fotos': imagesUrls,
-                                  'haciendaID': widget.haciendaID,
                                 };
                                 try {
                                   if (widget.bovinoID != null &&

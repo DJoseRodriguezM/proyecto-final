@@ -8,10 +8,9 @@ import './../new_bovino_page.dart';
 class DatosPage extends StatefulWidget {
   final String bovinoNombre;
   final String bovinoID;
-  final String haciendaID;
 
   const DatosPage(
-      {Key? key, required this.bovinoNombre, required this.bovinoID, required this.haciendaID})
+      {Key? key, required this.bovinoNombre, required this.bovinoID})
       : super(key: key);
 
   @override
@@ -76,7 +75,6 @@ class _DatosPageState extends State<DatosPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => NewBovino(
-                      haciendaID: widget.haciendaID,
                       bovinoID: bovinoID,
                     ),
                   ),
@@ -348,7 +346,6 @@ class _DatosPageState extends State<DatosPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => BovinoScreen(
-                        haciendaID: widget.haciendaID,
                         bovinoID: bovino.id,
                       ),
                     ),
