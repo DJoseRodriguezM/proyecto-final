@@ -44,7 +44,9 @@ dependencies:
   cloud_firestore: 4.17.2
   table_calendar: 3.0.9
   image_picker: 1.1.0
-  cached_network_image: ^3.3.1
+  cached_network_image: 3.3.1
+  qrscan: 0.3.3
+  qr_flutter: 4.0.0
   
 dev_dependencies:
   flutter_test:
