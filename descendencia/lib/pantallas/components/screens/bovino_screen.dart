@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/widgets.dart';
 import './datos_page.dart';
+import './../VerTratamientosPage.dart';
 import './salud_page.dart';
 
 class BovinoScreen extends StatelessWidget {
@@ -164,11 +165,9 @@ class BovinoScreen extends StatelessWidget {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => SaludPage(
-                                              bovinoNombre:
-                                                  bovino['Identificacion'],
-                                              bovinoID: bovino.id,
-                                            ),
+                                            builder: (context) =>
+                                                VerTratamientosPage(
+                                                    bovinoId: bovino.id),
                                           ),
                                         );
                                       },
