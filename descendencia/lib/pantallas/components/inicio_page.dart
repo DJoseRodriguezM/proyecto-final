@@ -20,13 +20,13 @@ class _InicioPageCompState extends State<InicioPageComp> {
 
   void scanQr() async {
     String? cameraScanResult = await scanner.scan();
+    // print(cameraScanResult);
 
     if (cameraScanResult != null) {
       setState(() {
         qrValue = cameraScanResult;
       });
-    }
-    Navigator.push(
+      Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => BovinoScreen(
@@ -34,8 +34,7 @@ class _InicioPageCompState extends State<InicioPageComp> {
         ),
       ),
     );
-
-    // Navigator.pushNamed(context, MyRoutes.qr.name);
+    }
   }
 
   late DateTime _focusedDay;

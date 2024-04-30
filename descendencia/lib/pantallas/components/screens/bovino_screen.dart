@@ -57,7 +57,7 @@ class BovinoScreen extends StatelessWidget {
             ),
           );
         } else {
-          String Nombre = snapshot.data!.get('Identificacion');
+          String nombre = snapshot.data!.get('Identificacion');
           return Scaffold(
               appBar: AppBar(
                 title: Row(
@@ -72,7 +72,7 @@ class BovinoScreen extends StatelessWidget {
                           context: context,
                           builder: (BuildContext context) {
                             return Dialog(
-                                child: Container(
+                                child: SizedBox(
                               height: 300,
                               width: 300,
                               child: QrImage(
@@ -88,7 +88,7 @@ class BovinoScreen extends StatelessWidget {
                     const SizedBox(
                         width:
                             10), // Ajusta este valor para cambiar el espacio entre el botón y el título
-                    Text(Nombre),
+                    Text(nombre),
                   ],
                 ),
                 foregroundColor: Colors.white,
