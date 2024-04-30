@@ -17,6 +17,6 @@ final Map<String, Widget Function(BuildContext)> routes = {
   MyRoutes.animales.name: (context) => const AnimalPage(),
   MyRoutes.almacenamiento.name: (context) => const AlmacenamientoPage(),
   MyRoutes.personal.name: (context) => const PersonalPage(),
-  MyRoutes.general.name: (context) => const GeneralPage(),
+  MyRoutes.general.name: (context) => const GeneralPage(emailId: ''),
   MyRoutes.calendar.name: (context) => const CalendarPage(),
 };
