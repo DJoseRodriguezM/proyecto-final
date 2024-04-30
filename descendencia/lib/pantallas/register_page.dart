@@ -57,7 +57,6 @@ class RegisterPageState extends State<RegisterPage> {
                   children: [
                     TextFormField(
                       controller: nameController,
-                      maxLength: 20,
                       validator: (value) {
                         if (value!.isEmpty) return 'El nombre es obligatorio';
 
@@ -76,9 +75,9 @@ class RegisterPageState extends State<RegisterPage> {
                         border: OutlineInputBorder(),
                       ),
                     ),
+                    const SizedBox(height: 25),
                     TextFormField(
                       controller: emailController,
-                      maxLength: 25,
                       validator: (value) {
                         if (value!.isEmpty) return 'El correo es obligatorio';
 
@@ -101,9 +100,9 @@ class RegisterPageState extends State<RegisterPage> {
                         border: OutlineInputBorder(),
                       ),
                     ),
+                    const SizedBox(height: 25),
                     TextFormField(
                       controller: phoneController,
-                      maxLength: 20,
                       validator: (value) {
                         if (value!.isEmpty) return 'El teléfono es obligatorio';
 
@@ -125,9 +124,9 @@ class RegisterPageState extends State<RegisterPage> {
                         border: OutlineInputBorder(),
                       ),
                     ),
+                    const SizedBox(height: 25),
                     TextFormField(
                       controller: passwordController,
-                      maxLength: 25,
                       obscureText: !isPasswordVisible,
                       validator: (value) {
                         if (value!.isEmpty) return 'La contraseña es obligatoria';
@@ -162,9 +161,9 @@ class RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 25),
                     TextFormField(
                       controller: passwordconfirmController,
-                      maxLength: 25,
                       obscureText: !isPasswordVisible,
                       validator: (value) {
                         if (value!.isEmpty) return 'La confirmación de contraseña es obligatoria';
@@ -196,7 +195,7 @@ class RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 40),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         foregroundColor:

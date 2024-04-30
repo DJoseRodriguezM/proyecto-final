@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:descendencia/routes.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:descendencia/pantallas/components/model/event.dart';
+import 'package:descendencia/pantallas/components/screens/bovino_screen.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 
 class InicioPageComp extends StatefulWidget {
   const InicioPageComp({super.key});
@@ -14,6 +16,27 @@ class InicioPageComp extends StatefulWidget {
 }
 
 class _InicioPageCompState extends State<InicioPageComp> {
+  String qrValue = '';
+
+  void scanQr() async {
+    String? cameraScanResult = await scanner.scan();
+
+    if (cameraScanResult != null) {
+      setState(() {
+        qrValue = cameraScanResult;
+      });
+    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BovinoScreen(
+          bovinoID: qrValue,
+        ),
+      ),
+    );
+
+    // Navigator.pushNamed(context, MyRoutes.qr.name);
+  }
 
   late DateTime _focusedDay;
   late DateTime _firstDay;
@@ -21,7 +44,7 @@ class _InicioPageCompState extends State<InicioPageComp> {
   late DateTime _selectedDay;
   late CalendarFormat _calendarFormat;
   late Map<DateTime, List<Event>> _events;
-    int getHashCode(DateTime key) {
+  int getHashCode(DateTime key) {
     return key.day * 1000000 + key.month * 10000 + key.year;
   }
 
@@ -84,61 +107,61 @@ class _InicioPageCompState extends State<InicioPageComp> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TableCalendar(
-              eventLoader: _getEventsForTheDay,
-              calendarFormat: _calendarFormat,
-              startingDayOfWeek: StartingDayOfWeek.monday,
-              onFormatChanged: (format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              },
-              focusedDay: _focusedDay,
-              firstDay: _firstDay,
-              lastDay: _lastDay,
-              onPageChanged: (focusedDay) {
-                setState(() {
-                  _focusedDay = focusedDay;
-                });
-                _loadFirestoreEvents();
-              },
-              selectedDayPredicate: (day) => isSameDay(day, _selectedDay),
-              onDaySelected: (selectedDay, focusedDay) {
-                print(_events[selectedDay]);
-                setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
-                });
-              },
-              availableGestures: AvailableGestures.all,
-              headerStyle: const HeaderStyle(
-                titleTextStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Color.fromARGB(255, 5, 93, 24),
+                eventLoader: _getEventsForTheDay,
+                calendarFormat: _calendarFormat,
+                startingDayOfWeek: StartingDayOfWeek.monday,
+                onFormatChanged: (format) {
+                  setState(() {
+                    _calendarFormat = format;
+                  });
+                },
+                focusedDay: _focusedDay,
+                firstDay: _firstDay,
+                lastDay: _lastDay,
+                onPageChanged: (focusedDay) {
+                  setState(() {
+                    _focusedDay = focusedDay;
+                  });
+                  _loadFirestoreEvents();
+                },
+                selectedDayPredicate: (day) => isSameDay(day, _selectedDay),
+                onDaySelected: (selectedDay, focusedDay) {
+                  print(_events[selectedDay]);
+                  setState(() {
+                    _selectedDay = selectedDay;
+                    _focusedDay = focusedDay;
+                  });
+                },
+                availableGestures: AvailableGestures.all,
+                headerStyle: const HeaderStyle(
+                  titleTextStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Color.fromARGB(255, 5, 93, 24),
+                  ),
+                  formatButtonVisible: false,
+                  titleCentered: true,
+                  rightChevronIcon: Icon(
+                    Icons.chevron_right,
+                    size: 16,
+                    color: Color.fromARGB(255, 5, 93, 24),
+                  ),
+                  leftChevronIcon: Icon(
+                    Icons.chevron_left,
+                    size: 16,
+                    color: Color.fromARGB(255, 5, 93, 24),
+                  ),
                 ),
-                formatButtonVisible: false,
-                titleCentered: true,
-                rightChevronIcon: Icon(
-                  Icons.chevron_right,
-                  size: 16,
-                  color: Color.fromARGB(255, 5, 93, 24),
-                ),
-                leftChevronIcon: Icon(
-                  Icons.chevron_left,
-                  size: 16,
-                  color: Color.fromARGB(255, 5, 93, 24),
+                calendarStyle: const CalendarStyle(
+                  weekendTextStyle: TextStyle(
+                    color: Color.fromARGB(255, 5, 93, 24),
+                  ),
+                  selectedDecoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color.fromARGB(255, 5, 93, 24),
+                  ),
                 ),
               ),
-              calendarStyle: const CalendarStyle(
-                weekendTextStyle: TextStyle(
-                  color: Color.fromARGB(255, 5, 93, 24),
-                ),
-                selectedDecoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color.fromARGB(255, 5, 93, 24),
-                ),
-              ),
-            ),
               const SizedBox(height: 50.0),
               ElevatedButton(
                 onPressed: () {
@@ -192,6 +215,33 @@ class _InicioPageCompState extends State<InicioPageComp> {
                     ),
                     const SizedBox(height: 10.0),
                     const Text('Datos Generales'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigator.pushNamed(context, MyRoutes.salud.name);
+                  setState(() {
+                    scanQr();
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+                  backgroundColor: const Color.fromARGB(255, 5, 93, 24),
+                ),
+                child: const Column(
+                  children: [
+                    SizedBox(height: 10.0),
+                    Icon(Icons.qr_code, size: 80),
+                    SizedBox(height: 10.0),
+                    Text('Escanear QR'),
                   ],
                 ),
               ),
