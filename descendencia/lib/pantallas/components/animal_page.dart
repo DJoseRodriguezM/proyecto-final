@@ -97,7 +97,6 @@ class _AnimalPageState extends State<AnimalPage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => BovinoScreen(
-                                    bovinoNombre: bovino['Identificacion'],
                                     bovinoID: bovino.id,
                                   ),
                                 ),
