@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:descendencia/Widgets/InputItem.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'InicioPage.dart';
 
 Future<UserCredential> signInWithGoogle() async {
   // Trigger the authentication flow
@@ -93,29 +94,32 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 80.0),
                   ElevatedButton(
                     onPressed: () async {
-                      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+                      final FirebaseFirestore firestore =
+                          FirebaseFirestore.instance;
                       final String email = emailController.text.trim();
                       final String password = passwordController.text.trim();
 
                       try {
                         // Consultar la colección 'usuarios' en Firestore para el email y contraseña dada
-                        final QuerySnapshot<Map<String, dynamic>> userDoc= await firestore
-                            .collection('usuarios')
-                            .where('email', isEqualTo: email)
-                            .where('contraseña', isEqualTo: password)
-                            .limit(1)
-                            .get();
+                        final QuerySnapshot<Map<String, dynamic>> userDoc =
+                            await firestore
+                                .collection('usuarios')
+                                .where('email', isEqualTo: email)
+                                .where('contraseña', isEqualTo: password)
+                                .limit(1)
+                                .get();
 
                         // Verificar si se encontró un usuario con la documentación dada
                         if (userDoc.docs.isNotEmpty) {
-                            Navigator.pushReplacementNamed(
-                              context,
-                              MyRoutes.inicioroute.name,
-                            );
+                          Navigator.pushReplacementNamed(
+                            context,
+                            MyRoutes.inicioroute.name,
+                          );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('No se encontró un usuario con ese correo electrónico.'),
+                              content: Text(
+                                  'No se encontró un usuario con ese correo electrónico.'),
                               backgroundColor: Color.fromARGB(255, 5, 93, 24),
                             ),
                           );
@@ -179,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                     builder: (context) {
-                                      return GeneralPage(emailId: emailId);
+                                      return InicioPage();
                                     },
                                   ),
                                 ),
