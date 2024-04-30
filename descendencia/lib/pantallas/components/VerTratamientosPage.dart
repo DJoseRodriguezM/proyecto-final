@@ -62,8 +62,7 @@ class VerTratamientosPage extends StatelessWidget {
                         child: Icon(Icons.delete, color: Colors.white),
                       ),
                       onDismissed: (direction) {
-                        // Implementar la lógica para eliminar el tratamiento
-                        // Utiliza la referencia del documento para eliminarlo
+                     
                         FirebaseFirestore.instance
                             .collection('tratamientos')
                             .doc(tratamiento.id)
@@ -115,7 +114,6 @@ class _DetalleBovinoPageState extends State<DetalleBovinoPage> {
     'Mastitis',
     'Coccidiosis',
     'Neumonía',
-    // Agrega más tratamientos si es necesario
   ];
 
   @override
@@ -127,7 +125,6 @@ class _DetalleBovinoPageState extends State<DetalleBovinoPage> {
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        // Envuelve el contenido con SingleChildScrollView
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Form(
