@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:descendencia/pantallas/components/general_page.dart';
-import 'package:descendencia/pantallas/register_page.dart';
+import 'package:descendencia/pantallas/inicioPage.dart';
 import 'package:descendencia/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -147,15 +146,8 @@ class _LoginPageState extends State<LoginPage> {
                   // *********************************************************************
                   const SizedBox(height: 40.0),
                   ElevatedButton(
-                    onPressed: () async {
-                      final emailId = emailController.text;
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterPage(),
-                        ),
-                      );
+                    onPressed: () {
+                      Navigator.pushNamed(context, MyRoutes.register.name);
                     },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 40),
@@ -173,13 +165,12 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 20.0),
                   ElevatedButton(
                     onPressed: () {
-                      final emailId = emailController.text;
                       signInWithGoogle()
                           .then((UserCredential user) => {
                                 Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                     builder: (context) {
-                                      return GeneralPage(emailId: emailId);
+                                      return InicioPage();
                                     },
                                   ),
                                 ),
