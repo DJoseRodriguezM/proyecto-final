@@ -1,10 +1,13 @@
+import 'package:descendencia/pantallas/components/screens/datos_page.dart';
+import 'package:descendencia/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'new_bovino_page.dart';
 import './screens/bovino_screen.dart';
 
 class AnimalPage extends StatefulWidget {
-  const AnimalPage({Key? key}) : super(key: key);
+  final String hacienda;
+  const AnimalPage({Key? key, required this.hacienda}) : super(key: key);
 
   @override
   State<AnimalPage> createState() => _AnimalPageState();
@@ -14,10 +17,13 @@ class _AnimalPageState extends State<AnimalPage> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   int x = 1;
 
-
   @override
   Widget build(BuildContext context) {
-    final bovinos = firestore.collection('Bovinos').snapshots();
+    final haciendaID = widget.hacienda;
+    final bovinos = firestore
+        .collection('Bovinos')
+        .where('haciendaID', isEqualTo: haciendaID)
+        .snapshots();
 
     return Scaffold(
       appBar: AppBar(
@@ -97,6 +103,7 @@ class _AnimalPageState extends State<AnimalPage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => BovinoScreen(
+                                    haciendaID: haciendaID,
                                     bovinoID: bovino.id,
                                   ),
                                 ),
@@ -153,7 +160,9 @@ class _AnimalPageState extends State<AnimalPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => NewBovino()),
+            MaterialPageRoute(
+              builder: (context) => NewBovino(haciendaID: widget.hacienda),
+            ), 
           );
         },
         tooltip: 'Nuevo Bovino',

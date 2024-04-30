@@ -1,10 +1,10 @@
-import 'package:descendencia/routes.dart';
+import 'package:descendencia/pantallas/InicioPage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GeneralPage extends StatefulWidget {
-  const GeneralPage({Key? key, required this.emailId}) : super(key: key);
-  final String emailId;
+  String userID;
+  GeneralPage({Key? key, required this.userID}) : super(key: key);
   
   @override
   _GeneralPageState createState() => _GeneralPageState();
@@ -18,24 +18,10 @@ class _GeneralPageState extends State<GeneralPage> {
   final ganaderiaArea = TextEditingController();
   final areaMedida = TextEditingController();
 
-  String haciendaID = '';
-  String userID = '';
-
-  @override
-  void initState() {
-    super.initState();
-    // Genera un ID único para la hacienda cuando se inicializa la página
-    haciendaID = FirebaseFirestore.instance.collection('hacienda').doc().id;
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    userID = ModalRoute.of(context)!.settings.arguments as String;
-  }
 
   @override
   Widget build(BuildContext context) {
+    final userID = widget.userID;
     if (userID.isNotEmpty) {
       instance.collection('hacienda').doc(userID).get().then((value) {
         nombre.text = value['nombre'];
@@ -184,14 +170,18 @@ class _GeneralPageState extends State<GeneralPage> {
                             const SnackBar(
                                 content: Text('Hacienda Registrada')));
 
-                            Navigator.pushReplacementNamed(
-                              context, MyRoutes.inicioroute.name);
+                            Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => InicioPage(haciendaID: docRef.id),
+                                  ), 
+                            );
 
                             await docRef.set(data);
                           } catch (e) {
                             print('Error al registrar el usuario: $e');
                           }
-                          
+
                           return;
                         }
                       },

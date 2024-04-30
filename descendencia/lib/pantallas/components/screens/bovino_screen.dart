@@ -9,8 +9,9 @@ import './salud_page.dart';
 class BovinoScreen extends StatelessWidget {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final String bovinoID;
+  final String haciendaID;
 
-  BovinoScreen({required this.bovinoID});
+  BovinoScreen({required this.bovinoID, required this.haciendaID});
 
   Future<DocumentSnapshot> obtenerDocumento() async {
     final documentReference =
@@ -131,6 +132,7 @@ class BovinoScreen extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => DatosPage(
+                                              haciendaID: haciendaID,
                                               bovinoNombre:
                                                   bovino['Identificacion'],
                                               bovinoID: bovino.id,

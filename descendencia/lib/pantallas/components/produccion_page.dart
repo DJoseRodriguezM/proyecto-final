@@ -1,9 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:descendencia/pantallas/components/animal_page.dart';
 import 'package:descendencia/routes.dart';
 import 'package:flutter/material.dart';
 
-class ProduccionPage extends StatelessWidget {
-  const ProduccionPage({ super.key });
-
+class ProduccionPage extends StatefulWidget {
+  final String hacienda;
+  const ProduccionPage({Key? key, required this.hacienda}) : super(key: key);
+  
+  @override
+  _ProduccionPageState createState() => _ProduccionPageState();
+}
+  
+class _ProduccionPageState extends State<ProduccionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +28,13 @@ class ProduccionPage extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, MyRoutes.animales.name);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AnimalPage(hacienda: widget.hacienda),
+                      ), 
+                  );
+                  //Navigator.pushReplacementNamed(context, MyRoutes.animales.name, arguments: {'haciendaID': widget.hacienda});
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
