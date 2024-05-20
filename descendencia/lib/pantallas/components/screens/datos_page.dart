@@ -122,7 +122,7 @@ class _DatosPageState extends State<DatosPage> {
                               ),
                       ),
                       Container(
-                        color: Colors.grey[200],
+                        color: Color.fromARGB(255, 255, 255, 255),
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -134,8 +134,8 @@ class _DatosPageState extends State<DatosPage> {
                                       ? Icons.male
                                       : Icons.female,
                                   color: bovino['Sexo'] == 'Macho'
-                                      ? Colors.blue
-                                      : Colors.pink,
+                                      ? Color.fromARGB(255, 0, 121, 213)
+                                      : Color.fromARGB(255, 246, 68, 195),
                                 ),
                                 SizedBox(width: 8),
                                 Text(
@@ -146,17 +146,18 @@ class _DatosPageState extends State<DatosPage> {
                             ),
                             Row(
                               children: [
-                                Icon(
+                                Image.asset(
                                   bovino['Proposito'] == 'Carne'
-                                      ? Icons.restaurant
-                                      : Icons.local_drink,
-                                  color: bovino['Proposito'] == 'Carne'
-                                      ? Colors.brown
-                                      : Colors.blue,
+                                      ? 'assets/carne.png'
+                                      : 'assets/leche.png',
+                                  width: 24,
+                                  height: 24,
                                 ),
                                 SizedBox(width: 8),
                                 Text(
-                                  bovino['Proposito'],
+                                  bovino['Proposito'] == 'Carne'
+                                      ? 'Carne'
+                                      : 'Leche',
                                   style: TextStyle(fontSize: 16),
                                 ),
                               ],
@@ -179,8 +180,6 @@ class _DatosPageState extends State<DatosPage> {
                                   : '$edadMeses ${edadMeses > 1 ? 'meses' : 'mes'}',
                             ),
                             const SizedBox(height: 15.0),
-                            _buildDetailRow('Sexo', bovino['Sexo']),
-                            const SizedBox(height: 15.0),
                             _buildDetailRow('Raza', bovino['Raza']),
                             const SizedBox(height: 15.0),
                             _buildDetailRow(
@@ -189,8 +188,6 @@ class _DatosPageState extends State<DatosPage> {
                                     .toDate()
                                     .toString()
                                     .substring(0, 10)),
-                            const SizedBox(height: 15.0),
-                            _buildDetailRow('Lote', bovino['Proposito']),
                             const SizedBox(height: 15.0),
                             _buildDetailRow('Peso', '${bovino['Peso']} lb'),
                             const SizedBox(height: 15.0),
