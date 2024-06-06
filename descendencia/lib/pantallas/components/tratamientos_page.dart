@@ -43,7 +43,7 @@ class TratamientosPage extends StatelessWidget {
                     },
                     icon: Icon(
                       Icons.monitor_heart,
-                      color: Color.fromARGB(255, 103, 176, 2),
+                      color: const Color.fromARGB(255, 5, 93, 24),
                     ),
                   ),
                 );

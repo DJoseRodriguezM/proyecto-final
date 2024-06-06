@@ -69,6 +69,18 @@ class __InventoryFormState extends State<_InventoryForm> {
         ),
         const SizedBox(height: 20),
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white,
+            minimumSize: const Size(double.infinity, 50),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: const EdgeInsets.symmetric(
+              vertical: 15,
+              horizontal: 50,
+            ),
+            backgroundColor: const Color.fromARGB(255, 5, 93, 24),
+          ),
           onPressed: _saveDataToFirestore,
           child: const Text('Guardar'),
         ),
@@ -106,60 +118,88 @@ class _InventoryList extends StatelessWidget {
             itemCount: documents.length,
             itemBuilder: (context, index) {
               final Map<String, dynamic> data =
-                  documents[index].data() as Map<String, dynamic>;
+                documents[index].data() as Map<String, dynamic>;
+
+              int quantity = data['quantity'];
+
               return Dismissible(
                 key: UniqueKey(),
                 direction: DismissDirection.endToStart,
                 background: Container(
-                  color: Colors.red,
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(right: 20.0),
-                  child: const Icon(Icons.delete, color: Colors.white),
+                color: Colors.red,
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(right: 20.0),
+                child: const Icon(Icons.delete, color: Colors.white),
                 ),
                 confirmDismiss: (DismissDirection direction) async {
-                  return await showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        backgroundColor: Color.fromARGB(244, 255, 255, 255),
-                        title: const Text("Confirmar eliminación"),
-                        content: const Text(
-                          "¿Estás seguro de que deseas eliminar este elemento?",
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: Text(
-                              "Cancelar",
-                              style: TextStyle(
-                                  color: const Color.fromARGB(255, 26, 26, 26)),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(true),
-                            child: Text(
-                              "Eliminar",
-                              style: TextStyle(
-                                  color: const Color.fromARGB(255, 19, 0, 0)),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
+                return await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: Color.fromARGB(244, 255, 255, 255),
+                    title: const Text("Confirmar eliminación"),
+                    content: const Text(
+                    "¿Estás seguro de que deseas eliminar este elemento?",
+                    ),
+                    actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: Text(
+                      "Cancelar",
+                      style: TextStyle(
+                        color: const Color.fromARGB(255, 26, 26, 26)),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      child: Text(
+                      "Eliminar",
+                      style: TextStyle(
+                        color: const Color.fromARGB(255, 19, 0, 0)),
+                      ),
+                    ),
+                    ],
                   );
+                  },
+                );
                 },
                 onDismissed: (direction) {
-                  FirebaseFirestore.instance
-                      .collection('inventory')
-                      .doc(documents[index].id)
-                      .delete();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Producto eliminado')),
-                  );
+                FirebaseFirestore.instance
+                  .collection('inventory')
+                  .doc(documents[index].id)
+                  .delete();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Producto eliminado')),
+                );
                 },
                 child: ListTile(
-                  title: Text(data['product']),
-                  subtitle: Text('Cantidad: ${data['quantity']}'),
+                title: Text(data['product']),
+                subtitle: Text('Cantidad: $quantity'),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                  IconButton(
+                    icon: Icon(Icons.remove),
+                    onPressed: () {
+                    if (quantity > 0) {
+                      FirebaseFirestore.instance
+                        .collection('inventory')
+                        .doc(documents[index].id)
+                        .update({'quantity': quantity - 1});
+                    }
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () {
+                    FirebaseFirestore.instance
+                      .collection('inventory')
+                      .doc(documents[index].id)
+                      .update({'quantity': quantity + 1});
+                    },
+                  ),
+                  ],
+                ),
                 ),
               );
             },

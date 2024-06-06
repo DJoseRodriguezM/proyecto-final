@@ -62,7 +62,6 @@ class VerTratamientosPage extends StatelessWidget {
                         child: Icon(Icons.delete, color: Colors.white),
                       ),
                       onDismissed: (direction) {
-                     
                         FirebaseFirestore.instance
                             .collection('tratamientos')
                             .doc(tratamiento.id)
@@ -132,28 +131,42 @@ class _DetalleBovinoPageState extends State<DetalleBovinoPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Seleccione el tipo de tratamiento:',
-                  style: TextStyle(fontSize: 16),
-                ),
-                DropdownButton<String>(
-                  value: _selectedTratamiento.isNotEmpty
-                      ? _selectedTratamiento
-                      : null,
-                  onChanged: (String? newValue) {
+                // Text(
+                //   'Seleccione el tipo de tratamiento:',
+                //   style: TextStyle(fontSize: 16),
+                // ),
+                // DropdownButton<String>(
+                //   value: _selectedTratamiento.isNotEmpty
+                //       ? _selectedTratamiento
+                //       : null,
+                //   onChanged: (String? newValue) {
+                //     setState(() {
+                //       _selectedTratamiento = newValue!;
+                //     });
+                //   },
+                //   items: nombresTratamientos.map((String value) {
+                //     return DropdownMenuItem<String>(
+                //       value: value,
+                //       child: Text(value),
+                //     );
+                //   }).toList(),
+                // ),
+
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Tipo de tratamiento',
+                    labelStyle:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                  ),
+                  onChanged: (value) {
                     setState(() {
-                      _selectedTratamiento = newValue!;
+                      _selectedTratamiento = value;
                     });
                   },
-                  items: nombresTratamientos.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
+                  style: TextStyle(fontSize: 24),
                 ),
                 SizedBox(height: 20),
-                Divider(),
+                // Divider(),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Medicamento'),
                   onChanged: (value) {
@@ -184,7 +197,7 @@ class _DetalleBovinoPageState extends State<DetalleBovinoPage> {
                     style: TextStyle(fontSize: 14),
                   ),
                 ),
-                SizedBox(height: 18),
+                SizedBox(height: 30),
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
@@ -195,7 +208,15 @@ class _DetalleBovinoPageState extends State<DetalleBovinoPage> {
                     child: Text('Guardar Tratamiento'),
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
-                      backgroundColor: Colors.green,
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 15,
+                        horizontal: 50,
+                      ),
+                      backgroundColor: const Color.fromARGB(255, 5, 93, 24),
                     ),
                   ),
                 ),
